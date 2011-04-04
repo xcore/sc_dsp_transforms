@@ -1,3 +1,11 @@
+// Copyright (c) 2011, XMOS Ltd, All rights reserved
+// This software is freely distributable under a derivative of the
+// University of Illinois/NCSA Open Source License posted in
+// LICENSE.txt and at <http://github.xcore.com/>
+
+    // Forward DCT for JPEG - gets a patch of 8x8 (ints) and a quantisation table (8x8 ints).
+    // Makes liberal use of CP and DP. To be optimised further.
+   
 #define FIX_0_298631336  (  2446)	/* FIX(0.298631336) */
 #define FIX_0_390180644  (  3196)	/* FIX(0.390180644) */
 #define FIX_0_541196100  (  4433)	/* FIX(0.541196100) */
