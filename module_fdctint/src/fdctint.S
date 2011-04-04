@@ -5,6 +5,11 @@
 
     // Forward DCT for JPEG - gets a patch of 8x8 (ints) and a quantisation table (8x8 ints).
     // Makes liberal use of CP and DP. To be optimised further.
+    // Based on reference algorithm.
+
+    // TODO: remove SHR prior to MACCU
+    // TODO: rounding after phase 1 and phase 2.
+    // TODO: remove abuse of stackpointer for loop iteration - there must be a better way.
    
 #define FIX_0_298631336  (  2446)	/* FIX(0.298631336) */
 #define FIX_0_390180644  (  3196)	/* FIX(0.390180644) */

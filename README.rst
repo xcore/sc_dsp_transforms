@@ -13,26 +13,29 @@ sc_dsp_transforms
 Key Features
 ============
 
-* None
+* Basic quantising DCT for JPEG encoder
 
 To Do
 =====
 
-* Write forward dct
-* huffman
+* Create Huffman encoder
+* Create parallel DCT + huffman block.
 
 Firmware Overview
 =================
 
-The purpose of this repo is to collect a series of algorithms to perform transforsm on data, such as FFT, DCT, etc.
+The purpose of this repo is to collect a series of algorithms to perform
+transforsm on data, such as FFT, DCT, etc.
 
 Known Issues
 ============
 
-* None
+* This repo contains, for testing purposes, code from the JPEG library.
+  This is not covered by LICENSE.TXT but has its own original LICENSE in an
+  accompanying README file.
 
 Required Repositories
-================
+=====================
 
 * xcommon git\@github.com:xcore/xcommon.git
 
