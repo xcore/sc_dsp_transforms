@@ -13,6 +13,8 @@ p(int x[64], int div) {
 }
 
 main() {
+    int t1, t0;
+    timer t;
     int x[64] = {
         52,55,61, 66, 70, 61,64,73,
         63,59,55, 90,109, 85,69,72,
@@ -33,7 +35,15 @@ main() {
         49, 64, 78, 87, 103, 121, 120, 101,
         72, 92, 95, 98, 112, 100, 103, 99
     };
+    for(int i = 0; i < 64; i++) {
+        quant[i] = (4*(0x40000000/quant[i])) & ~1;
+    }
     p(x, 1);
+    t :> t0;
     fdctintS(x, quant);
+    t :> t1;
+    printf("%d pixels/sec (50 MIPS @ 400 MHz)\n", 32*(100000000/(t1-t0)));
+    printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
+    printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
     p(x, 8);
 }

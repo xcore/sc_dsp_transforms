@@ -35,7 +35,8 @@ fdctintS:
     stw r0, sp[3]
     stw r0, sp[4]
     stw r0, sp[5]
-    stw r0, sp[6]
+    stw r1, sp[6]
+    set cp, r1
     stw r0, sp[7]
     ldw dp, sp[7]
     ldc r11, 0
@@ -186,13 +187,19 @@ nextColumn:
 
     add r0, r10, r11
     ashr r0, r0, 2
-    stw r0, dp[0*8]
+    ldw r1, cp[0*8]
+    lsub r2, r3, r1, r1, r1
+    maccs r2, r3, r1, r0
+    stw r2, dp[0*8]
     
     sub r0, r10, r11
     ashr r0, r0, 2
-    stw r0, dp[4*8]            // r10, r11 dead.
+    ldw r1, cp[4*8]
+    lsub r2, r3, r1, r1, r1
+    maccs r2, r3, r1, r0
+    stw r2, dp[4*8]            // r10, r11 dead.
 
-    ldc r2, 15
+    ldc r10, 15
     
     add r0, r8, r9
     ldc r1,  FIX_0_541196100
@@ -200,13 +207,19 @@ nextColumn:
     ldc r1,  FIX_0_765366865
     mul r9, r1, r9
     add r9, r9, r0
-    ashr r9, r9, r2
-    stw r9, dp[2*8]
+    ashr r9, r9, r10
+    ldw r1, cp[2*8]
+    lsub r2, r3, r1, r1, r1
+    maccs r2, r3, r9, r1
+    stw r2, dp[2*8]
     ldc r1,  FIX_1_847759065
     mul r8, r1, r8
     sub r8, r0, r8
-    ashr r8, r8, r2
-    stw r8, dp[6*8]            // r8, r9 dead
+    ashr r8, r8, r10
+    ldw r1, cp[6*8]
+    lsub r2, r3, r1, r1, r1
+    maccs r2, r3, r8, r1
+    stw r2, dp[6*8]            // r8, r9 dead
 
     add r1, r4, r7
     add r2, r5, r6
@@ -244,29 +257,42 @@ nextColumn:
     add r4, r4, r1
     add r4, r4, r3
     ashr r4, r4, r10
-    stw r4, dp[7*8]
+    ldw r8, cp[7*8]
+    lsub r9, r11, r8, r8, r8
+    maccs r9, r11, r4, r8
+    stw r9, dp[7*8]
 
     add r5, r5, r2
     add r5, r5, r0
     ashr r5, r5, r10
-    stw r5, dp[5*8]
+    ldw r8, cp[5*8]
+    lsub r9, r11, r8, r8, r8
+    maccs r9, r11, r5, r8
+    stw r9, dp[5*8]
 
     add r6, r6, r2
     add r6, r6, r3
     ashr r6, r6, r10
-    stw r6, dp[3*8]
+    ldw r8, cp[3*8]
+    lsub r9, r11, r8, r8, r8
+    maccs r9, r11, r6, r8
+    stw r9, dp[3*8]
 
     add r7, r7, r1
     add r7, r7, r0
     ashr r7, r7, r10
-    stw r7, dp[1*8]
+    ldw r8, cp[1*8]
+    lsub r9, r11, r8, r8, r8
+    maccs r9, r11, r7, r8
+    stw r9, dp[1*8]
 
     ldaw dp, dp[1]
     ldaw sp, sp[1]
+    ldaw r11, cp[1]
+    set  cp, r11
     ldw  r11, sp[0]
     bt   r11, nextColumn
 
-DONE:   
     ldaw sp, sp[1]
     ldw r4, sp[0]
     ldw r5, sp[1]
