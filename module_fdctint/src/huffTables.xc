@@ -3,23 +3,8 @@
 // University of Illinois/NCSA Open Source License posted in
 // LICENSE.txt and at <http://github.xcore.com/>
 
-#include <stdio.h>
-
-int dcllength[12] = {2,3,3,3,3,3,4,5,6,7,8,9};
-int dclcode[12] = {0b00,
-                  0b010, 
-                  0b011, 
-                  0b100, 
-                  0b101, 
-                  0b110, 
-                  0b1110, 
-                  0b11110, 
-                  0b111110, 
-                  0b1111110, 
-                  0b11111110, 
-                  0b111111110 };
-
 #ifdef COMPUTECODES
+#include <stdio.h>
 // CCITT Rec. T.81 (1992 E)
 int aclength[16][16];
 int accode[16][16];
@@ -85,7 +70,7 @@ main() {
             putchar('\n');
         }
     }
-    printf("char aclengths[160] = {\n");
+    printf("unsigned char aclengths[160] = {\n");
     for(int j = 0; j < 11; j++) {
         for(int i = 0; i < 16; i++) {
             printf("%2d,", aclength[i][j]);
@@ -279,7 +264,7 @@ main() {
 // f/8  16  1111111111111100
 // f/9  16  1111111111111101
 // f/a  16  1111111111111110
-char aclengths[160] = {
+unsigned char aclengths[176] = {
  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11,
  2, 4, 5, 6, 6, 7, 7, 8, 9, 9, 9,10,10,11,16,16,
  2, 5, 8, 9,10,11,12,12,15,16,16,16,16,16,16,16,
@@ -292,16 +277,43 @@ char aclengths[160] = {
 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
 };
-short accodes[160] = {
-   a,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, 7f9,
-   0,   c,  1c,  3a,  3b,  7a,  7b,  fa, 1f8, 1f9, 1fa, 3f9, 3fa, 7f8,ffeb,fff5,
-   1,  1b,  f9, 1f7, 3f8, 7f7, ff6, ff7,7fc0,ffbe,ffc7,ffd0,ffd9,ffe2,ffec,fff6,
-   4,  79, 3f7, ff5,ff96,ff9e,ffa6,ffae,ffb6,ffbf,ffc8,ffd1,ffda,ffe3,ffed,fff7,
-   b, 1f6, ff4,ff8f,ff97,ff9f,ffa7,ffaf,ffb7,ffc0,ffc9,ffd2,ffdb,ffe4,ffee,fff8,
-  1a, 7f6,ff89,ff90,ff98,ffa0,ffa8,ffb0,ffb8,ffc1,ffca,ffd3,ffdc,ffe5,ffef,fff9,
-  78,ff84,ff8a,ff91,ff99,ffa1,ffa9,ffb1,ffb9,ffc2,ffcb,ffd4,ffdd,ffe6,fff0,fffa,
-  f8,ff85,ff8b,ff92,ff9a,ffa2,ffaa,ffb2,ffba,ffc3,ffcc,ffd5,ffde,ffe7,fff1,fffb,
- 3f6,ff86,ff8c,ff93,ff9b,ffa3,ffab,ffb3,ffbb,ffc4,ffcd,ffd6,ffdf,ffe8,fff2,fffc,
-ff82,ff87,ff8d,ff94,ff9c,ffa4,ffac,ffb4,ffbc,ffc5,ffce,ffd7,ffe0,ffe9,fff3,fffd,
-ff83,ff88,ff8e,ff95,ff9d,ffa5,ffad,ffb5,ffbd,ffc6,ffcf,ffd8,ffe1,ffea,fff4,fffe,
+short accodes[176] = {
+   0xa,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0, 0x7f9,
+   0x0,   0xc,  0x1c,  0x3a,  0x3b,  0x7a,  0x7b,  0xfa, 0x1f8, 0x1f9, 0x1fa, 0x3f9, 0x3fa, 0x7f8,0xffeb,0xfff5,
+   0x1,  0x1b,  0xf9, 0x1f7, 0x3f8, 0x7f7, 0xff6, 0xff7,0x7fc0,0xffbe,0xffc7,0xffd0,0xffd9,0xffe2,0xffec,0xfff6,
+   0x4,  0x79, 0x3f7, 0xff5,0xff96,0xff9e,0xffa6,0xffae,0xffb6,0xffbf,0xffc8,0xffd1,0xffda,0xffe3,0xffed,0xfff7,
+   0xb, 0x1f6, 0xff4,0xff8f,0xff97,0xff9f,0xffa7,0xffaf,0xffb7,0xffc0,0xffc9,0xffd2,0xffdb,0xffe4,0xffee,0xfff8,
+  0x1a, 0x7f6,0xff89,0xff90,0xff98,0xffa0,0xffa8,0xffb0,0xffb8,0xffc1,0xffca,0xffd3,0xffdc,0xffe5,0xffef,0xfff9,
+  0x78,0xff84,0xff8a,0xff91,0xff99,0xffa1,0xffa9,0xffb1,0xffb9,0xffc2,0xffcb,0xffd4,0xffdd,0xffe6,0xfff0,0xfffa,
+  0xf8,0xff85,0xff8b,0xff92,0xff9a,0xffa2,0xffaa,0xffb2,0xffba,0xffc3,0xffcc,0xffd5,0xffde,0xffe7,0xfff1,0xfffb,
+ 0x3f6,0xff86,0xff8c,0xff93,0xff9b,0xffa3,0xffab,0xffb3,0xffbb,0xffc4,0xffcd,0xffd6,0xffdf,0xffe8,0xfff2,0xfffc,
+0xff82,0xff87,0xff8d,0xff94,0xff9c,0xffa4,0xffac,0xffb4,0xffbc,0xffc5,0xffce,0xffd7,0xffe0,0xffe9,0xfff3,0xfffd,
+0xff83,0xff88,0xff8e,0xff95,0xff9d,0xffa5,0xffad,0xffb5,0xffbd,0xffc6,0xffcf,0xffd8,0xffe1,0xffea,0xfff4,0xfffe,
  };
+
+unsigned char ordering[63] = {
+         1,  8, 16,  9,  2,  3, 10, 17, 24,
+    32, 25, 18, 11,  4,  5, 12, 19, 26, 33,
+    40, 48, 41, 34, 27, 20, 13,  6,  7, 14,
+    21, 28, 35, 42, 49, 56, 57, 50, 43, 36,
+    29, 22, 15, 23, 30, 37, 44, 51, 58, 59,
+    52, 45, 38, 31, 39, 46, 53, 60, 61, 54,
+    47, 55, 62, 63
+};
+
+unsigned char dclengths[12] = {2,3,3,3,3,3,4,5,6,7,8,9};
+
+short dccodes[12] = {
+    0b00,
+    0b010, 
+    0b011, 
+    0b100, 
+    0b101, 
+    0b110, 
+    0b1110, 
+    0b11110, 
+    0b111110, 
+    0b1111110, 
+    0b11111110, 
+    0b111111110
+};

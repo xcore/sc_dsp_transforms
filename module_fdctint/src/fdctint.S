@@ -201,14 +201,18 @@ nextColumn:
     add r0, r10, r11
     ashr r0, r0, 2
     ldw r1, cp[0*8]
-    lsub r2, r3, r1, r1, r1
+    ldc r2, 0
+    ldc r3, 0x80
+    shl r3, r3, 24
     maccs r2, r3, r1, r0
     stw r2, dp[0*8]
     
     sub r0, r10, r11
     ashr r0, r0, 2
     ldw r1, cp[4*8]
-    lsub r2, r3, r1, r1, r1
+    ldc r2, 0
+    ldc r3, 0x80
+    shl r3, r3, 24
     maccs r2, r3, r1, r0
     stw r2, dp[4*8]            // r10, r11 dead.
 
@@ -222,7 +226,9 @@ nextColumn:
     add r9, r9, r0
     ashr r9, r9, r10
     ldw r1, cp[2*8]
-    lsub r2, r3, r1, r1, r1
+    ldc r2, 0
+    ldc r3, 0x80
+    shl r3, r3, 24
     maccs r2, r3, r9, r1
     stw r2, dp[2*8]
     ldc r1,  FIX_1_847759065
@@ -230,7 +236,9 @@ nextColumn:
     sub r8, r0, r8
     ashr r8, r8, r10
     ldw r1, cp[6*8]
-    lsub r2, r3, r1, r1, r1
+    ldc r2, 0
+    ldc r3, 0x80
+    shl r3, r3, 24
     maccs r2, r3, r8, r1
     stw r2, dp[6*8]            // r8, r9 dead
 
@@ -262,40 +270,46 @@ nextColumn:
     
     sub r3, r11, r3
     sub r0, r11, r0
-    neg r1, r1                         // TODO: optimise away.
-    neg r2, r2                         // TODO: optimise away.
     
     ldc r10, 15
 
-    add r4, r4, r1
+    sub r4, r4, r1
     add r4, r4, r3
     ashr r4, r4, r10
     ldw r8, cp[7*8]
-    lsub r9, r11, r8, r8, r8
+    ldc r9, 0
+    ldc r11, 0x80
+    shl r11, r11, 24
     maccs r9, r11, r4, r8
     stw r9, dp[7*8]
 
-    add r5, r5, r2
+    sub r5, r5, r2
     add r5, r5, r0
     ashr r5, r5, r10
     ldw r8, cp[5*8]
-    lsub r9, r11, r8, r8, r8
+    ldc r9, 0
+    ldc r11, 0x80
+    shl r11, r11, 24
     maccs r9, r11, r5, r8
     stw r9, dp[5*8]
 
-    add r6, r6, r2
+    sub r6, r6, r2
     add r6, r6, r3
     ashr r6, r6, r10
     ldw r8, cp[3*8]
-    lsub r9, r11, r8, r8, r8
+    ldc r9, 0
+    ldc r11, 0x80
+    shl r11, r11, 24
     maccs r9, r11, r6, r8
     stw r9, dp[3*8]
 
-    add r7, r7, r1
+    sub r7, r7, r1
     add r7, r7, r0
     ashr r7, r7, r10
     ldw r8, cp[1*8]
-    lsub r9, r11, r8, r8, r8
+    ldc r9, 0
+    ldc r11, 0x80
+    shl r11, r11, 24
     maccs r9, r11, r7, r8
     stw r9, dp[1*8]
 

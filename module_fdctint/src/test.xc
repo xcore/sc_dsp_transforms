@@ -4,6 +4,7 @@
 // LICENSE.txt and at <http://github.xcore.com/>
 
 #include "stdio.h"
+#include "huffman.h"
 
 extern fdctintS(int x[], int c[]);
 
@@ -18,6 +19,7 @@ p(int x[64], int div) {
 }
 
 main() {
+    streaming chan c;
     int t1, t0;
     timer t;
     int x[64] = {
@@ -41,14 +43,20 @@ main() {
         72, 92, 95, 98, 112, 100, 103, 99
     };
     for(int i = 0; i < 64; i++) {
-        quant[i] = (4*(0x40000000/quant[i])) & ~1;
+        quant[i] = (4*(0x08000000/quant[i])) & ~1;
     }
-    p(x, 1);
-    t :> t0;
-    fdctintS(x, quant);
-    t :> t1;
-    printf("%d pixels/sec (50 MIPS @ 400 MHz)\n", 32*(100000000/(t1-t0)));
-    printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
-    printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
-    p(x, 8);
+//    p(x, 1);
+    par {
+        {
+        t :> t0;
+            fdctintS(x, quant);
+        t :> t1;
+            printf("%d pixels/sec (50 MIPS @ 400 MHz)\n", 32*(100000000/(t1-t0)));
+            printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
+            printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
+            p(x, 1);
+            huffEncode(c, x);
+        }
+        emitter(c);
+    }
 }
