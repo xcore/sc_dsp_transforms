@@ -13,15 +13,15 @@
 #define RST0 0xFFD0
 
 static void outByte(int x) {
-    printf("%02x ", x & 0xff);
+//    printf("%02x ", x & 0xff);
 }
 
 void header4(int header) {
-    printf("%02x %02x ", header >> 8, header & 0xff);    
+//    printf("%02x %02x ", header >> 8, header & 0xff);    
 }
 
 void header2(int header) {
-    printf("%02x ", header & 0xff);    
+//    printf("%02x ", header & 0xff);    
 }
 
 void hufftableprint(const unsigned char lengths[], const short codes[], int len, int isAC) {
@@ -150,14 +150,11 @@ int dcval = 0;
 #pragma unsafe arrays
 
 void huffEncode(streaming chanend emitter, int x[64]) {
-    timer tt;
-    int t0, t1;
     int v = x[0];
     int dcdiff = v - dcval;
     int exp, t, code;
     int run = 0;
     dcval = v;
-    tt :> t0;
     if (dcdiff < 0) {
         t = -dcdiff;
         dcdiff--;
@@ -187,7 +184,6 @@ void huffEncode(streaming chanend emitter, int x[64]) {
             }
             exp = magnitude(t);
             code = exp << 4 | run;
-//            printf("== Run %d Value %d Bits %d ==\n", run, v, exp);
             emit(emitter, aclengths[code], accodes[code]);
             emit(emitter, exp, v);
             run = 0;
@@ -196,8 +192,4 @@ void huffEncode(streaming chanend emitter, int x[64]) {
     if (run > 15) {
         emit(emitter, acl0x00, accode0x00);
     }
-    tt :> t1;
-/*            printf("%d pixels/sec (50 MIPS @ 400 MHz)\n", 32*(100000000/(t1-t0)));
-            printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
-            printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);*/
 }

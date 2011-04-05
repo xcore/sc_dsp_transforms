@@ -54,12 +54,17 @@ main() {
         t :> t0;
             fdctintS(x, quant2);
         t :> t1;
-            printf("%d pixels/sec (50 MIPS @ 400 MHz)\n", 32*(100000000/(t1-t0)));
+            printf("DCT: %d us for 64 %d pixels/sec (50 MIPS @ 400 MHz)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
             printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
             printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
             p(x, 1);
             huffEncode(c, x);
+        t :> t0;
             huffEncode(c, x);
+        t :> t1;
+            printf("HUFF: %d us for 64 %d pixels/sec (50 MIPS @ 400 MHz)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
+            printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
+            printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
             huffEncode(c, x);
             soutct(c, 5);
         }
