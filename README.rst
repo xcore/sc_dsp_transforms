@@ -14,11 +14,12 @@ Key Features
 ============
 
 * Basic quantising DCT for JPEG encoder
+* Basic Huffman encoder
+* Basic Generation of JPEG frame
 
 To Do
 =====
 
-* Create Huffman encoder
 * Create parallel DCT + huffman block.
 
 Firmware Overview
