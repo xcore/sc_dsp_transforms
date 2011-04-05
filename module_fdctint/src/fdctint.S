@@ -51,7 +51,7 @@ fdctintS:
     stw r1, sp[6]
     set cp, r1
     stw r0, sp[7]
-    ldw dp, sp[7]
+    set dp, r0
     ldc r11, 0
     stw r11,sp[8]
 
@@ -167,8 +167,9 @@ nextRow:
 
     extdp 64
 
-    // END OF ROW PASS , NEED A BRANCH
-//    bu DONE
+
+// End of ROW pass
+
     
     extsp 8
 

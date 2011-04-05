@@ -264,7 +264,7 @@ main() {
 // f/8  16  1111111111111100
 // f/9  16  1111111111111101
 // f/a  16  1111111111111110
-unsigned char aclengths[176] = {
+const unsigned char aclengths[176] = {
  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11,
  2, 4, 5, 6, 6, 7, 7, 8, 9, 9, 9,10,10,11,16,16,
  2, 5, 8, 9,10,11,12,12,15,16,16,16,16,16,16,16,
@@ -277,7 +277,7 @@ unsigned char aclengths[176] = {
 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
 16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
 };
-short accodes[176] = {
+const short accodes[176] = {
    0xa,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0,   0x0, 0x7f9,
    0x0,   0xc,  0x1c,  0x3a,  0x3b,  0x7a,  0x7b,  0xfa, 0x1f8, 0x1f9, 0x1fa, 0x3f9, 0x3fa, 0x7f8,0xffeb,0xfff5,
    0x1,  0x1b,  0xf9, 0x1f7, 0x3f8, 0x7f7, 0xff6, 0xff7,0x7fc0,0xffbe,0xffc7,0xffd0,0xffd9,0xffe2,0xffec,0xfff6,
@@ -291,7 +291,7 @@ short accodes[176] = {
 0xff83,0xff88,0xff8e,0xff95,0xff9d,0xffa5,0xffad,0xffb5,0xffbd,0xffc6,0xffcf,0xffd8,0xffe1,0xffea,0xfff4,0xfffe,
  };
 
-unsigned char ordering[63] = {
+const unsigned char ordering[63] = {
          1,  8, 16,  9,  2,  3, 10, 17, 24,
     32, 25, 18, 11,  4,  5, 12, 19, 26, 33,
     40, 48, 41, 34, 27, 20, 13,  6,  7, 14,
@@ -301,9 +301,9 @@ unsigned char ordering[63] = {
     47, 55, 62, 63
 };
 
-unsigned char dclengths[12] = {2,3,3,3,3,3,4,5,6,7,8,9};
+const unsigned char dclengths[12] = {2,3,3,3,3,3,4,5,6,7,8,9};
 
-short dccodes[12] = {
+const short dccodes[12] = {
     0b00,
     0b010, 
     0b011, 

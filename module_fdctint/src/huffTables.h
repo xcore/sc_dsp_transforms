@@ -9,8 +9,8 @@
 #define acl0x00        4
 #define accode0x00   0xa
 
-extern unsigned char aclengths[176];
-extern short accodes[176];
-extern unsigned char ordering[63];
-extern unsigned char dclengths[12];
-extern short dccodes[12];
+extern const unsigned char aclengths[176];
+extern const short accodes[176];
+extern const unsigned char ordering[63];
+extern const unsigned char dclengths[12];
+extern const short dccodes[12];
