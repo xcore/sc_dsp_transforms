@@ -10,6 +10,30 @@
     // TODO: remove SHR prior to MACCU
     // TODO: rounding after phase 1 and phase 2.
     // TODO: remove abuse of stackpointer for loop iteration - there must be a better way.
+
+
+    .globl   doDCT.nstackwords
+    .linkset doDCT.nstackwords, 0
+    
+    .globl doDCT
+    
+    .align 4
+doDCT:
+    out   res[r0], r1
+    in    r0, res[r0]
+    retsp 0
+
+
+    .globl   endDCT.nstackwords
+    .linkset endDCT.nstackwords, 0
+    
+    .globl endDCT
+    
+    .align 4
+endDCT:
+    outct res[r0], 5
+    chkct res[r0], 5
+    retsp 0
    
 #define FIX_0_298631336  (  2446)	/* FIX(0.298631336) */
 #define FIX_0_390180644  (  3196)	/* FIX(0.390180644) */
@@ -24,13 +48,16 @@
 #define FIX_2_562915447  (  20995)	/* FIX(2.562915447) */
 #define FIX_3_072711026  (  25172)	/* FIX(3.072711026) */
 
+#define N 14
+
     .globl   fdctintS.nstackwords
-    .linkset fdctintS.nstackwords, 20
+    .linkset fdctintS.nstackwords, N
     
     .globl fdctintS
-    
+
+    .align 4
 fdctintS:
-    entsp 12
+    entsp N
     stw r4, sp[0]
     stw r5, sp[1]
     stw r6, sp[2]
@@ -41,20 +68,18 @@ fdctintS:
     stw r11, sp[7]
     stw dp, sp[8]
     stw cp, sp[9]
-
-    extsp 9
-    stw r0, sp[1]
-    stw r0, sp[2]
-    stw r0, sp[3]
-    stw r0, sp[4]
-    stw r0, sp[5]
-    stw r1, sp[6]
-    set cp, r1
-    stw r0, sp[7]
-    set dp, r0
-    ldc r11, 0
-    stw r11,sp[8]
-
+    stw r0, sp[10]
+    stw r1, sp[11]
+    
+blockLoop:
+    ldw cp, sp[11]
+    testct r1, res[r0]
+    bt r1, noMoreBlocks 
+    in r1, res[r0]
+    set dp, r1
+    stw r1, sp[12]
+    ldc r11, 0                         // Just misalign nextRow - improves performance.
+    
 nextRow:
     ldw r0, dp[0]
     ldw r11, dp[7]
@@ -135,44 +160,46 @@ nextRow:
     
     sub r3, r11, r3
     sub r0, r11, r0
-    neg r1, r1                         // TODO: optimise away.
-    neg r2, r2                         // TODO: optimise away.
 
     ldc r10, 11
 
-    add r4, r4, r1
+    sub r4, r4, r1
     add r4, r4, r3
     ashr r4, r4, r10
     stw r4, dp[7]
 
-    add r5, r5, r2
+    sub r5, r5, r2
     add r5, r5, r0
     ashr r5, r5, r10
     stw r5, dp[5]
 
-    add r6, r6, r2
+    sub r6, r6, r2
     add r6, r6, r3
     ashr r6, r6, r10
     stw r6, dp[3]
 
-    add r7, r7, r1
+    sub r7, r7, r1
     add r7, r7, r0
     ashr r7, r7, r10
     stw r7, dp[1]
 
     ldaw dp, dp[8]
-    ldaw sp, sp[1]
-    ldw  r11, sp[0]
-    bt   r11, nextRow
+
+    ldaw r11, cp[1]
+    set  cp, r11
+    ldw  r10, cp[7*8]
+    bt   r10, nextRow
 
     extdp 64
 
 
 // End of ROW pass
 
+    ldw cp, sp[11]
     
-    extsp 8
+//    extsp 8
 
+   // .align 4
 nextColumn: 
     ldw r0, dp[0*8]
     ldw r11, dp[7*8]
@@ -315,13 +342,20 @@ nextColumn:
     stw r9, dp[1*8]
 
     ldaw dp, dp[1]
-    ldaw sp, sp[1]
     ldaw r11, cp[1]
     set  cp, r11
-    ldw  r11, sp[0]
+    ldw  r11, cp[7*8]
     bt   r11, nextColumn
 
-    ldaw sp, sp[1]
+    ldw r0, sp[10]
+    ldw r1, sp[12]
+    out res[r0], r1
+
+    bu blockLoop
+noMoreBlocks:
+    inct r1, res[r0]
+    outct res[r0], r1
+    
     ldw r4, sp[0]
     ldw r5, sp[1]
     ldw r6, sp[2]
@@ -333,4 +367,4 @@ nextColumn:
 	ldw dp, sp[8]
 	ldw cp, sp[9]
 
-    retsp 12
+    retsp N

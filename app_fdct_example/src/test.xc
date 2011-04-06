@@ -6,20 +6,20 @@
 #include "stdio.h"
 #include "xs1.h"
 #include "huffman.h"
+#include "fdctint.h"
 
-extern fdctintS(int x[], int c[]);
 
-p(int x[64], int div) {
+p(int x[], int div) {
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             printf("%8d ", x[i*8+j]/div);
         }
         printf("\n");
     }
-    printf("\n");
+    printf("%08x \n", x[64]);
 }
 
-const int quant[64] = {
+const unsigned char quant[64] = {
         16, 11, 10, 16, 24, 40, 51, 61,
         12, 12, 14, 19, 26, 58, 60, 55,
         14, 13, 16, 24, 40, 57, 69, 56,
@@ -30,11 +30,13 @@ const int quant[64] = {
         72, 92, 95, 98, 112, 100, 103, 99
 };
 
+
 main() {
     streaming chan c;
+    streaming chan toDCT;
     int t1, t0;
     timer t;
-    int x[64] = {
+    int x[65] = {
         52,55,61, 66, 70, 61,64,73,
         63,59,55, 90,109, 85,69,72,
         62,59,68,113,144,104,66,73,
@@ -42,29 +44,28 @@ main() {
         67,61,68,104,126, 88,68,70,
         79,65,60, 70, 77, 68,58,75,
         85,71,64, 59, 55, 61,65,83,
-        87,79,69, 68, 65, 76,78,94
+        87,79,69, 68, 65, 76,78,94, 0xdeadbeef
     };
-    int quant2[64];
-    for(int i = 0; i < 64; i++) {
-        quant2[i] = (4*(0x08000000/quant[i])) & ~1;
-    }
-//    p(x, 1);
+    int quant2[65];
+    quantDCT(quant2, quant);
     par {
+        fdctintS(toDCT, quant2);
         {
         t :> t0;
-            fdctintS(x, quant2);
+            doDCT(toDCT, x);
         t :> t1;
-            printf("DCT: %d us for 64 %d pixels/sec (50 MIPS @ 400 MHz)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
-            printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
-            printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
+            endDCT(toDCT);
+            printf("DCT: %d us for 64 pixels @ 100 MIPS: %d pixels/sec (50 MIPS)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
+            printf("grey QVGA: %d fps (1 thread, 50 MIPS)\n", (32*(100000000/(t1-t0)))/320/240);
+            printf("grey  VGA: %d fps (1 thread, 50 MIPS)\n", (32*(100000000/(t1-t0)))/640/480);
             p(x, 1);
             huffEncode(c, x);
         t :> t0;
             huffEncode(c, x);
         t :> t1;
-            printf("HUFF: %d us for 64 %d pixels/sec (50 MIPS @ 400 MHz)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
-            printf("grey QVGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/320/240);
-            printf("grey  VGA: %d fps (1 thread, 50 MIPS @ 400 MHz)\n", (32*(100000000/(t1-t0)))/640/480);
+            printf("HUFF: %d us for 64 pixels @ 100 MIPS: %d pixels/sec (50 MIPS)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
+            printf("grey QVGA: %d fps (2 threads, 50 MIPS)\n", (32*(100000000/(t1-t0)))/320/240);
+            printf("grey  VGA: %d fps (2 threads, 50 MIPS)\n", (32*(100000000/(t1-t0)))/640/480);
             huffEncode(c, x);
             soutct(c, 5);
         }

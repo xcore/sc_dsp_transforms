@@ -62,7 +62,7 @@ void hufftableprint(const unsigned char lengths[], const short codes[], int len,
     }
 }
 
-extern const int quant[64];
+extern const unsigned char quant[64];
 void emitter(streaming chanend generator) {
     unsigned char length;
     int code;
