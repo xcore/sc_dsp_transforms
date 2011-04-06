@@ -18,15 +18,12 @@ void readImage(void) {
     }
     while((c = getc(fd)) != '\n');
     while((c = getc(fd)) != '\n');
-//    fscanf(fd, "%*[^\n]\n");
-//    fscanf(fd, "%*[^\n]\n");
     while((c = getc(fd)) != ' ') {
         xSize = xSize * 10 + c - '0';
     }
     while((c = getc(fd)) != '\n') {
         ySize = ySize * 10 + c - '0';
     }
-//    fscanf(fd, "%d %d\n", &xSize, &ySize);
     if (xSize*ySize > 320*240) {
         printf("Oops - expected fewer pixels not %d x %d pixels\n", xSize, ySize);
     }

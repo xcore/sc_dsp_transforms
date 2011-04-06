@@ -14,17 +14,22 @@ Key Features
 ============
 
 Functionality:
+
 * Basic quantising DCT for JPEG encoder
 * Basic Huffman encoder
 * Basic Generation of JPEG frame
 * Access functions to compress a series of blocks
 
 Performance (provided you can stream data in and out):
+
 * three 50 MIPS threads compress approx 1.7 Msamples/s.
 * QVGA greyscale: 22 fps in three 50 MIPS threads. 
 * VGA greyscale: 5 fps in three 50 MIPS threads. 
 * VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
   this may go up to 20 fps.
+
+The performance depends on the compression ratio. When compressing
+marginally, Huffman encoding starts to take a serious amount of time. 
 
 To Do
 =====

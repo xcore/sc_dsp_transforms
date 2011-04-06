@@ -20,7 +20,7 @@ APP_NAME = app_jpeg_example
 
 XCC_FLAGS = -O3 -g
 
-XCC_MAP_FLAGS = --show-report
+XCC_MAP_FLAGS = -report
 
 # The USED_MODULES variable lists other module used by the application. 
 
