@@ -17,8 +17,9 @@ Functionality:
 
 * Basic quantising DCT for JPEG encoder
 * Basic Huffman encoder
-* Basic Generation of JPEG frame
-* Access functions to compress a series of blocks
+* Access functions to compress a series of blocks.
+* Example app to compress a PBM file into a JPEG file (PBM because that
+  uses little memory to store).
 
 Performance (provided you can stream data in and out):
 
