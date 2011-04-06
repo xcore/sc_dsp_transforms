@@ -8,7 +8,7 @@ TARGET = XK-1
 # not include the .xe postfix. If left blank the name will default to 
 # the project name
 
-APP_NAME = app_fdct_example
+APP_NAME = app_jpeg_example
 
 # The flags passed to xcc when building the application
 # You can also set the following to override flags for a particular language:
