@@ -9,7 +9,7 @@
 #include "fdctint.h"
 
 
-p(int x[], int div) {
+static void p(int x[], int div) {
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             printf("%8d ", x[i*8+j]/div);
@@ -31,7 +31,7 @@ const unsigned char quant[64] = {
 };
 
 
-main() {
+int main(void) {
     streaming chan c;
     streaming chan toDCT;
     int t1, t0;
@@ -71,4 +71,5 @@ main() {
         }
         emitter(c);
     }
+    return 0;
 }

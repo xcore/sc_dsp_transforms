@@ -31,7 +31,7 @@ void hufftableprint(const unsigned char lengths[], const short codes[], int len,
         allL[i] = 0;
     }
     for(int i = 0; i < len; i++) {
-        allL[lengths[i]] ++;
+        allL[(int)lengths[i]] ++;
     }
     for(int i = 1; i < 17; i++) {
         Lh += allL[i]+1;
@@ -95,7 +95,7 @@ void emitter(streaming chanend generator) {
             header2(0x00);
             header2(quant[0]);
             for(int i = 0; i < 63; i++) {
-                header2(quant[ordering[i]]);
+                header2(quant[(int)ordering[i]]);
             }
             
             hufftableprint(dclengths, dccodes, 12, 0);

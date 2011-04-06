@@ -18,11 +18,11 @@ APP_NAME = app_fdct_example
 # If the variable XCC_MAP_FLAGS is set it overrides the flags passed to 
 # xcc for the final link (mapping) stage.
 
-XCC_FLAGS = 
+XCC_FLAGS = -O3
 
 # The USED_MODULES variable lists other module used by the application. 
 
-USED_MODULES = module_fdctint
+USED_MODULES = module_fdctint module_jhuffman
 
 #=============================================================================
 # The following part of the Makefile includes the common build infrastructure

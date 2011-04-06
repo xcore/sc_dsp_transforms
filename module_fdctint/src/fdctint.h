@@ -14,7 +14,7 @@
  * \sa doDCT
  * \sa endDCT
  */
-extern fdctintS(streaming chanend blocks, int preprocessedQuant[65]);
+extern void fdctintS(streaming chanend blocks, int preprocessedQuant[65]);
 
 /**
  * Interface function to synchronously perform a DCT operation on a single datablock.
