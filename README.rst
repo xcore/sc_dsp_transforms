@@ -27,6 +27,7 @@ Performance (provided you can stream data in and out):
 * VGA greyscale: 5 fps in three 50 MIPS threads. 
 * VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
   this may go up to 20 fps.
+* Colour-images: approx two thirds of the speed?
 
 The performance depends on the compression ratio. When compressing
 marginally, Huffman encoding starts to take a serious amount of time. 
@@ -43,9 +44,11 @@ The purpose of this repo is to collect a series of algorithms to perform
 transforms on data, such as FFT, DCT, etc.
 
 There are two modules in the repo:
+
 * module_fdctint: forward quantising DCT.
   The process requires patches of 8x8 integer values, and in situ replace
   this with 8x8 transformed and quantised patches. 
+
 * module_jhuffman: Huffman encode for JPEG images (this may have to go in a
   different repo).
   The process requires patches of 8x8 integer values, and streams bits out
