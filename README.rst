@@ -7,26 +7,44 @@ sc_dsp_transforms
 
 :Maintainer:  https://github.com/henkmuller
 
-:Description:  Transforms
+:Description:  DCT and other transforms
 
 
 Key Features
 ============
 
+Functionality:
 * Basic quantising DCT for JPEG encoder
 * Basic Huffman encoder
 * Basic Generation of JPEG frame
+* Access functions to compress a series of blocks
+
+Performance (provided you can stream data in and out):
+* three 50 MIPS threads compress approx 1.7 Msamples/s.
+* QVGA greyscale: 22 fps in three 50 MIPS threads. 
+* VGA greyscale: 5 fps in three 50 MIPS threads. 
+* VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
+  this may go up to 20 fps.
 
 To Do
 =====
 
-* Create parallel DCT + huffman block.
+* Interface with a camera.
 
 Firmware Overview
 =================
 
 The purpose of this repo is to collect a series of algorithms to perform
-transforsm on data, such as FFT, DCT, etc.
+transforms on data, such as FFT, DCT, etc.
+
+There are two modules in the repo:
+* module_fdctint: forward quantising DCT.
+  The process requires patches of 8x8 integer values, and in situ replace
+  this with 8x8 transformed and quantised patches. 
+* module_jhuffman: Huffman encode for JPEG images (this may have to go in a
+  different repo).
+  The process requires patches of 8x8 integer values, and streams bits out
+  over a (streaming) channel.
 
 Known Issues
 ============

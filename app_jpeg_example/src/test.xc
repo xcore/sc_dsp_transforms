@@ -121,7 +121,7 @@ void jpegtrailer() {
 }
 
 void jpegPrinter(streaming chanend codes) {
-    unsigned char c[2000];
+    unsigned char c[20000];
     int cnt = 0;
     while (!stestct(codes)) {
         unsigned char x;
@@ -233,30 +233,10 @@ int main(void) {
     readImage();
     quantDCT(quant2, quant);
     par {
-        
         fdctintS(toDCT, quant2);
         processHuff(toHuffman, toCodes);
         jpegPrinter(toCodes);
         feed(toDCT, toHuffman);
-/*        {
-        t :> t0;
-            doDCT(toDCT, x);
-        t :> t1;
-            endDCT(toDCT);
-            printf("DCT: %d us for 64 pixels @ 100 MIPS: %d pixels/sec (50 MIPS)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
-            printf("grey QVGA: %d fps (1 thread, 50 MIPS)\n", (32*(100000000/(t1-t0)))/320/240);
-            printf("grey  VGA: %d fps (1 thread, 50 MIPS)\n", (32*(100000000/(t1-t0)))/640/480);
-            p(x, 1);
-            doHuff(toHuffman, x);
-        t :> t0;
-            doHuff(toHuffman, x);
-        t :> t1;
-            printf("HUFF: %d us for 64 pixels @ 100 MIPS: %d pixels/sec (50 MIPS)\n", (t1-t0)/100, 32*(100000000/(t1-t0)));
-            printf("grey QVGA: %d fps (2 threads, 50 MIPS)\n", (32*(100000000/(t1-t0)))/320/240);
-            printf("grey  VGA: %d fps (2 threads, 50 MIPS)\n", (32*(100000000/(t1-t0)))/640/480);
-            doHuff(toHuffman, x);
-            endHuff(toHuffman);
-        }*/
     }
     return 0;
 }

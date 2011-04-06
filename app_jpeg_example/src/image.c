@@ -1,19 +1,33 @@
+// Copyright (c) 2011, XMOS Ltd, All rights reserved
+// This software is freely distributable under a derivative of the
+// University of Illinois/NCSA Open Source License posted in
+// LICENSE.txt and at <http://github.xcore.com/>
+
 #include "stdio.h"
 
-unsigned char image[320*60/8];
+unsigned char image[320*240/8];
 int xSize, ySize;
 static FILE *fd;
 
 void readImage(void) {
-    char *name = "example2.pbm";
+    char *name = "example.pbm";
+    int c;
     fd = fopen(name, "r");
     if (fd == NULL) {
         printf("File %s not found\n", name);
     }
-    fscanf(fd, "%*[^\n]\n");
-    fscanf(fd, "%*[^\n]\n");
-    fscanf(fd, "%d %d\n", &xSize, &ySize);
-    if (xSize*ySize > 320*60) {
+    while((c = getc(fd)) != '\n');
+    while((c = getc(fd)) != '\n');
+//    fscanf(fd, "%*[^\n]\n");
+//    fscanf(fd, "%*[^\n]\n");
+    while((c = getc(fd)) != ' ') {
+        xSize = xSize * 10 + c - '0';
+    }
+    while((c = getc(fd)) != '\n') {
+        ySize = ySize * 10 + c - '0';
+    }
+//    fscanf(fd, "%d %d\n", &xSize, &ySize);
+    if (xSize*ySize > 320*240) {
         printf("Oops - expected fewer pixels not %d x %d pixels\n", xSize, ySize);
     }
     if (xSize % 32 != 0) {
@@ -22,7 +36,6 @@ void readImage(void) {
     for(int i = 0; i < xSize*ySize/8; i++) {
         int bits = 0;
         for(int k = 0; k < 8; k++) {
-            int c;
             bits >>= 1;
             do {
                 c = getc(fd);
@@ -31,7 +44,7 @@ void readImage(void) {
                     return;
                 }
             } while (c != '0' && c != '1');
-            if (c == '1') {
+            if (c == '0') { // ! reverse of other netpbm formats.
                 bits |= 0x80;
             }
         }
@@ -39,13 +52,9 @@ void readImage(void) {
     }
     printf("Read %d pixels\n", xSize * ySize);
     fclose(fd);
-    fd = fopen("z.jpg", "w");
+    fd = fopen("output.jpg", "w");
 }
 
 void header2(int header) {
     fputc(header, fd);    
-}
-
-void headerClose() {
-    fclose(fd);
 }
