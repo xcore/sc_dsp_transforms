@@ -118,7 +118,10 @@ void fftTest64() {
         re[i] = (i*i*i) & 255;//sinValue(sine_64, i, 64, 64)/0x1000000;
         im[i] = (737*i) & 255; //0; //cosValue(sine_64, i, 64, 64)>>24;
     }
+    t :> t0;
     fftTwiddle(re, im, 64);
+    t :> t1;
+    printf("Post 64 twiddle (%d ticks)\n", t1-t0);
     t :> t0;
     fftForward(re, im, 64, sine_64);
     t :> t1;
@@ -139,7 +142,10 @@ void fftTest1024() {
         re[i] = (i*i*i) & 255;//sinValue(sine_1024, i, 1024, 1024)/0x1000000;
         im[i] = (737*i) & 255; //0; //cosValue(sine_1024, i, 1024, 1024)>>24;
     }
+    t :> t0;
     fftTwiddle(re, im, 1024);
+    t :> t1;
+    printf("Post 1024 twiddle (%d ticks)\n", t1-t0);
     t :> t0;
     fftForward(re, im, 1024, sine_1024);
     t :> t1;
