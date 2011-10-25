@@ -11,7 +11,7 @@ void fftTest8() {
     int re[8], im[8];
     for(int i = 0; i < 8; i++) {
         re[i] = (i*i*i) & 255;//sinValue(sine_8, i, 8, 8)>>24;
-        im[i] = (737*i) & 255; //0; //cosValue(sine_8, i, 8, 8)>>24;
+        im[i] = 0;//(737*i) & 255; //0; //cosValue(sine_8, i, 8, 8)>>24;
     }
     for(int i = 0; i < 8; i++) {
         printf("%d  %d\n", re[i], im[i]);
@@ -19,6 +19,9 @@ void fftTest8() {
     fftTwiddle(re, im, 8);
     fftForward(re, im, 8, sine_8);
     printf("Post FFT\n");
+    for(int i = 0; i < 8; i++) {
+        printf("%d  %d\n", re[i], im[i]);
+    }
     fftTwiddle(re, im, 8);
     fftInverse(re, im, 8, sine_8);
     printf("Post Inverse\n");
@@ -149,6 +152,7 @@ void fftTest1024() {
 }
 
 int main(void) {
+    fftTest8();
     fftTest8Large();
     fftTest1024Large();
     fftTest64();

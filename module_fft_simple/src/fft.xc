@@ -30,14 +30,6 @@ static inline int sinValue(int sine[], int k, int N, int total) {
     return sineValue(sine, k*(total/N), N, total);
 }
 
-static inline int mult(int a, int b) {
-    int h, l;
-    {h,l} = macs(a, b, 0, 0);
-//    printf("%d times %d is %d\n", a, b, h<<1);
-    return h << 2;        // TODO - this should be 2....
-}
-
-
 #pragma unsafe arrays
 void fftTwiddle(int re[], int im[], int N) {
     unsigned int shift = clz(N);
@@ -81,7 +73,6 @@ void fftForward(int re[], int im[], int N, int sine[]) {
                 im[block] = tIm + sIm2;
                 re[block+step2] = tRe - sRe2;
                 im[block+step2] = tIm - sIm2;
-
             }
         }
     }
@@ -113,7 +104,6 @@ void fftInverse(int re[], int im[], int N, int sine[]) {
                 im[block] = tIm + sIm2;
                 re[block+step2] = tRe - sRe2;
                 im[block+step2] = tIm - sIm2;
-
             }
         }
     }
