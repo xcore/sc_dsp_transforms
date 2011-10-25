@@ -61,18 +61,26 @@ void fftForward(int re[], int im[], int N, int sine[]) {
         for(int k = 0; k < step2; k++) {
             int rRe = cosValue(sine, k, step, N);
             int rIm = -sinValue(sine, k, step, N);
-            for(int block = 0; block < N; block+=step) {
-                int tRe = re[block + k];
-                int tIm = im[block + k];
-                int tRe2 = re[block + k + step2];
-                int tIm2 = im[block + k + step2];
-                int sRe2 = mult(tRe2, rRe) - mult(tIm2, rIm);
-                int sIm2 = mult(tRe2, rIm) + mult(tIm2, rRe);
-
-                re[block + k] = tRe + sRe2;
-                im[block + k] = tIm + sIm2;
-                re[block + k+step2] = tRe - sRe2;
-                im[block + k+step2] = tIm - sIm2;
+            for(int block = k; block < k+N; block+=step) {
+                int tRe = re[block];
+                int tIm = im[block];
+                int tRe2 = re[block + step2];
+                int tIm2 = im[block + step2];
+                int h;
+                unsigned l;
+                int sRe2, sIm2;
+                {h,l} = macs(tRe2, rRe, 0, 0x40000000);
+                {h,l} = macs(tIm2, -rIm, h, l);
+                sRe2 = h << 1 | l >> 31;
+                {h,l} = macs(tRe2, rIm, 0, 0x40000000);
+                {h,l} = macs(tIm2, rRe, h, l);
+                sIm2 = h << 1 | l >> 31;
+                tRe >>= 1;
+                tIm >>= 1;
+                re[block] = tRe + sRe2;
+                im[block] = tIm + sIm2;
+                re[block+step2] = tRe - sRe2;
+                im[block+step2] = tIm - sIm2;
 
             }
         }
@@ -86,18 +94,25 @@ void fftInverse(int re[], int im[], int N, int sine[]) {
         for(int k = 0; k < step2; k++) {
             int rRe = cosValue(sine, k, step, N);
             int rIm = sinValue(sine, k, step, N);
-            for(int block = 0; block < N; block+=step) {
-                int tRe = re[block + k];
-                int tIm = im[block + k];
-                int tRe2 = re[block + k + step2];
-                int tIm2 = im[block + k + step2];
-                int sRe2 = mult(tRe2, rRe) - mult(tIm2, rIm);
-                int sIm2 = mult(tRe2, rIm) + mult(tIm2, rRe);
+            for(int block = k; block < k+N; block+=step) {
+                int tRe = re[block];
+                int tIm = im[block];
+                int tRe2 = re[block + step2];
+                int tIm2 = im[block + step2];
+                int h;
+                unsigned l;
+                int sRe2, sIm2;
+                {h,l} = macs(tRe2, rRe, 0, 0x20000000);
+                {h,l} = macs(tIm2, -rIm, h, l);
+                sRe2 = h << 2 | l >> 30;
+                {h,l} = macs(tRe2, rIm, 0, 0x20000000);
+                {h,l} = macs(tIm2, rRe, h, l);
+                sIm2 = h << 2 | l >> 30;
 
-                re[block + k] = tRe + sRe2;
-                im[block + k] = tIm + sIm2;
-                re[block + k+step2] = tRe - sRe2;
-                im[block + k+step2] = tIm - sIm2;
+                re[block] = tRe + sRe2;
+                im[block] = tIm + sIm2;
+                re[block+step2] = tRe - sRe2;
+                im[block+step2] = tIm - sIm2;
 
             }
         }
