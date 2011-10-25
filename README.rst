@@ -20,6 +20,10 @@ Functionality:
 * Access functions to compress a series of blocks.
 * Example app to compress a PBM file into a JPEG file (PBM because that
   uses little memory to store).
+* Basic FFT
+
+DFT Performance
+===============
 
 Performance (provided you can stream data in and out):
 
@@ -37,6 +41,7 @@ To Do
 =====
 
 * Interface with a camera.
+* Optimise FFT
 
 Firmware Overview
 =================
@@ -44,7 +49,7 @@ Firmware Overview
 The purpose of this repo is to collect a series of algorithms to perform
 transforms on data, such as FFT, DCT, etc.
 
-There are two modules in the repo:
+There are three modules in the repo:
 
 * module_fdctint: forward quantising DCT.
   The process requires patches of 8x8 integer values, and in situ replace
@@ -54,6 +59,9 @@ There are two modules in the repo:
   different repo).
   The process requires patches of 8x8 integer values, and streams bits out
   over a (streaming) channel.
+
+* module_fft_simple: simple FFT (size must be a power of 2, straightforward
+  non-optimised code. 
 
 Known Issues
 ============
