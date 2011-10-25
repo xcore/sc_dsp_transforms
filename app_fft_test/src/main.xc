@@ -7,19 +7,6 @@
 #include "fft.h"
 #include "sine.h"
 
-void sineTest(void) {
-    int sv;
-    for(int k = 1; k <=8; k *=2) {
-        for(int i = 0; i < k; i++) {
-            sv = sinValue(sine_8, i, k, 8);
-            printf("Sin %d out of %d: %11d  ", i, k, sv);
-            sv = cosValue(sine_8, i, k, 8);
-            printf("Cos %d out of %d: %11d\n", i, k, sv);
-        }
-        printf("\n");
-    }
-}
-
 void fftTest8() {
     int re[8], im[8];
     for(int i = 0; i < 8; i++) {

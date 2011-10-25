@@ -23,6 +23,3 @@ void fftForward(int re[], int im[], int N, int sine[]);
 void fftInverse(int re[], int im[], int N, int sine[]);
 
 void fftTwiddle(int re[], int im[], int N);
-
-int sinValue(int sine[], int k, int N, int total);
-int cosValue(int sine[], int k, int N, int total);

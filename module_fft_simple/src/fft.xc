@@ -7,7 +7,8 @@
 #include <xclib.h>
 #include <stdio.h>
 
-int sineValue(int sine[], int index, int N, int total) {
+#pragma unsafe arrays
+static inline int sineValue(int sine[], int index, int N, int total) {
     int quart = total >> 2;
     int sgn = 1;
     index &= total - 1;
@@ -21,15 +22,15 @@ int sineValue(int sine[], int index, int N, int total) {
     return sgn * sine[2*quart - index];
 }
 
-int cosValue(int sine[], int k, int N, int total) {
+static inline int cosValue(int sine[], int k, int N, int total) {
     return sineValue(sine, k*(total/N) + (total/4), N, total);
 }
 
-int sinValue(int sine[], int k, int N, int total) {
+static inline int sinValue(int sine[], int k, int N, int total) {
     return sineValue(sine, k*(total/N), N, total);
 }
 
-int mult(int a, int b) {
+static inline int mult(int a, int b) {
     int h, l;
     {h,l} = macs(a, b, 0, 0);
 //    printf("%d times %d is %d\n", a, b, h<<1);
