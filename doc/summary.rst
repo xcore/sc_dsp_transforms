@@ -54,3 +54,18 @@ Note that there are a few more optimisations that could reduce the cycle
 count a bit, and that not performing rounding can further decrease cycle
 count.
 
+
+module_dct
+==========
+
+Performance (provided you can stream data in and out):
+
+* three 50 MIPS threads compress approx 1.7 Msamples/s.
+* QVGA greyscale: 22 fps in three 50 MIPS threads. 
+* VGA greyscale: 5 fps in three 50 MIPS threads. 
+* VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
+  this may go up to 20 fps.
+* Colour-images: approx two thirds of the speed?
+
+The performance depends on the compression ratio. When compressing
+marginally, Huffman encoding starts to take a serious amount of time. 

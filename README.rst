@@ -7,41 +7,33 @@ sc_dsp_transforms
 
 :Maintainer:  https://github.com/henkmuller
 
-:Description:  DCT and other transforms
+:Description:  DCT, FFT, and other transforms
 
 
 Key Features
 ============
 
-Functionality:
+DCT Functionality:
 
-* Basic quantising DCT for JPEG encoder
-* Basic Huffman encoder
+* Basic quantising DCT for JPEG compression
+* Basic Huffman encoder for JPEG encoder
 * Access functions to compress a series of blocks.
 * Example app to compress a PBM file into a JPEG file (PBM because that
   uses little memory to store).
-* Basic FFT
 
-DFT Performance
-===============
+FFT Functionality:
 
-Performance (provided you can stream data in and out):
-
-* three 50 MIPS threads compress approx 1.7 Msamples/s.
-* QVGA greyscale: 22 fps in three 50 MIPS threads. 
-* VGA greyscale: 5 fps in three 50 MIPS threads. 
-* VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
-  this may go up to 20 fps.
-* Colour-images: approx two thirds of the speed?
-
-The performance depends on the compression ratio. When compressing
-marginally, Huffman encoding starts to take a serious amount of time. 
+* Forward FFT
+* Inverse FFT
+* Bit twiddling
+* Pre-initialised arrays with complex roots for up to 4096 points.
+* Example app that performs forwards and inverse FFT in sequence
 
 To Do
 =====
 
-* Interface with a camera.
-* Optimise FFT
+* Interface DCT with a camera.
+* Optimise FFT, in particular calls to sin and cos.
 
 Firmware Overview
 =================
