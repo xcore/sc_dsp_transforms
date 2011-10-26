@@ -1,0 +1,169 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DSP Transforms &mdash; DSP transformations v0v1 documentation</title>
+    <link rel="stylesheet" href="_static/xdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0v1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js"></script>
+    <script type="text/javascript" src="_static/xcomment.js"></script>
+    <link rel="top" title="DSP transformations v0v1 documentation" href="index.html" /> 
+
+<script>
+function setheight() {
+h1 = document.getElementById('d1').style.height;
+h2 = document.getElementById('d2').style.height;
+
+if (parseInt(h1) > parseInt(h2)) {
+document.getElementById('d2').style.height=h1 + "px";
+}
+else {
+document.getElementById('d1').style.height=h2 + "px";
+}
+
+}
+</script>
+</head>
+
+<body onload="setheight();">
+
+  
+
+    <div class="document" id='d1'>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+<div style="float: right">
+</div>
+
+            
+  <div class="section" id="dsp-transforms">
+<h1>DSP Transforms<a class="headerlink" href="#dsp-transforms" title="Permalink to this headline">¶</a></h1>
+<p>DSP transformations perform functions such as FFTs or DFTs; they transform
+between the time and frequency domains.</p>
+<p>There are shelves of textbooks that cover filtering; a two-page summary is
+necessarily incomplete. Typical characterisations of transformations include:</p>
+<ul class="simple">
+<li>The number of points. This is the number of smaples on which to run the
+transform.</li>
+<li>Whether it requires a forward or a backwards transform.</li>
+<li>Type of filter. We at present only implemetn a one-dimensional FFT and a
+two-dimensional DCT.</li>
+</ul>
+<p>As a rule of thumb, computational requirements are O(n log n) in the number
+of points. Double the number of points doubles the time that an FFT takes
+plus a bit more.</p>
+<p>Typically, overflow leads to chaos. Numbers are typically
+rounded to the nearest value, with 0.5 being rounded up.</p>
+<div class="section" id="module-fft-simple">
+<h2>module_fft_simple<a class="headerlink" href="#module-fft-simple" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a function that performs a forward and/or inverse
+complex FFT on an array of data points. The number of cycles taken for the
+forward or inverse FFT is roughly the same. The table below shows the
+number of thread cycles for the bit twiddling, and for performing either an
+forward or an inverse FFT. The maximum rate shows the rate for performing a
+twiddle, a forward FFT, a twiddle, and an inverse FFT on a single 50 MIPS
+thread:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="19%" />
+<col width="20%" />
+<col width="13%" />
+<col width="14%" />
+<col width="19%" />
+</colgroup>
+<tbody valign="top">
+<tr><td rowspan="2">Points</td>
+<td colspan="2">Thread cycles</td>
+<td rowspan="2"><p class="first">Max rate</p>
+<p class="last">FFT+Inv</p>
+</td>
+<td rowspan="2">Memory</td>
+<td rowspan="2">Status</td>
+</tr>
+<tr><td>Twiddle</td>
+<td>FFT</td>
+</tr>
+<tr><td>64</td>
+<td>886</td>
+<td>14011</td>
+<td>1650 Hz</td>
+<td>1 KB</td>
+<td>Implemented</td>
+</tr>
+<tr><td>1024</td>
+<td>14626</td>
+<td>317515</td>
+<td>75  Hz</td>
+<td>2 KB</td>
+<td>Implemented</td>
+</tr>
+<tr><td>N</td>
+<td>3.5 N</td>
+<td>7.7 N log N</td>
+<td>50/...</td>
+<td>1 KB + N</td>
+<td>Implemented</td>
+</tr>
+</tbody>
+</table>
+<p>The memory required comprises roughly 1K of code, and then extra space for
+a sin() lookup table. It excludes storage for the data points, which
+amounts to eight bytes per point (four bytes real part, and four bytes
+imaginary part).</p>
+<p>Note that there are a few more optimisations that could reduce the cycle
+count a bit, and that not performing rounding can further decrease cycle
+count.</p>
+</div>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" id='d2'>
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">DSP transformations (0v1)</a></h3>
+
+<div id="searchbox" style="display: none;margin-bottom: 10px;">
+  <h3>Search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+
+
+    <div class="footer">
+    </div>
+  </body>
+</html>
+
+
+
