@@ -50,13 +50,13 @@ endDCT:
 
 #define N 14
 
-    .globl   fdctintS.nstackwords
-    .linkset fdctintS.nstackwords, N
+    .globl   forwardDCT.nstackwords
+    .linkset forwardDCT.nstackwords, N
     
-    .globl fdctintS
+    .globl forwardDCT
 
     .align 4
-fdctintS:
+forwardDCT:
     entsp N
     stw r4, sp[0]
     stw r5, sp[1]

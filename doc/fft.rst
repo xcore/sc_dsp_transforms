@@ -1,7 +1,8 @@
+module_fft
+''''''''''
 
-
-FFT
-'''
+The FFT module implements a set of functions that can be used to compute
+the FFT of a set of complex data points, or the inverse.
 
 API
 ===
@@ -10,9 +11,9 @@ Sine arrays
 -----------
 
 The include file "sine.h" defines a set of arrays that are to be used with
-the FFT functions, called sine_8, sine_16, ..., sine_4096. Depending on the
+the FFT functions, called sine_8[], sine_16[], ..., sine_8192[]. Depending on the
 number of points, pick the appropriate array and pass it to fftForward and
-fftInverse as quired.
+fftInverse as required.
 
 FFT functions
 -------------

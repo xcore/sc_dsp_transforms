@@ -1,10 +1,9 @@
-
-DCT
-'''
+module_dct_jpeg
+'''''''''''''''
 
 The DCT module comprises a heavily optimised DCT function that needs to run
 in a thread of its own (since it uses all registers of the processor). The
-DCT function operates in place on 64x64 blocks of data. A block of data is
+DCT function operates in place on 8x8 blocks of 2D data. A block of data is
 to be stored in memory, the address is to be passed to the function, and on
 completion the pointer is returned. Between outputting the address, and
 getting it back, the buffer is owned by the DCT-thread, and shall not be

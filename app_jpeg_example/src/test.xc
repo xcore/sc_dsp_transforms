@@ -233,7 +233,7 @@ int main(void) {
     readImage();
     quantDCT(quant2, quant);
     par {
-        fdctintS(toDCT, quant2);
+        forwardDCT(toDCT, quant2);
         processHuff(toHuffman, toCodes);
         jpegPrinter(toCodes);
         feed(toDCT, toHuffman);
