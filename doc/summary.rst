@@ -38,11 +38,11 @@ thread:
 |          +-------------+--------------+         |          |             |
 |          | Twiddle     | FFT          | FFT+Inv |          |             |
 +----------+-------------+--------------+---------+----------+-------------+
-| 64       | 886         | 14011        | 1650 Hz | 1 KB     | Implemented |
+| 64       | 886         | 10810        | 2137 Hz | 1 KB     | Implemented |
 +----------+-------------+--------------+---------+----------+-------------+
-| 1024     | 14626       | 317515       | 75  Hz  | 2 KB     | Implemented |
+| 1024     | 14626       | 256340       | 92  Hz  | 2 KB     | Implemented |
 +----------+-------------+--------------+---------+----------+-------------+
-| N        | 3.5 N       | 7.7 N log N  | 50/...  | 1 KB + N | Implemented |
+| N        | 14 N        | 25  N log N  |2/N log N| 1 KB + N | Implemented |
 +----------+-------------+--------------+---------+----------+-------------+
 
 The memory required comprises roughly 1K of code, and then extra space for
@@ -50,10 +50,9 @@ a sin() lookup table. It excludes storage for the data points, which
 amounts to eight bytes per point (four bytes real part, and four bytes
 imaginary part).
 
-Note that there are a few more optimisations that could reduce the cycle
-count a bit, and that not performing rounding can further decrease cycle
-count.
-
+Note that there is a trade-off between rounding and accuracy - the inverse
+FFT can be made more accurate (one extra bit) at a cost of 5% extra
+instructions. This is marked in the code.
 
 module_dct
 ==========

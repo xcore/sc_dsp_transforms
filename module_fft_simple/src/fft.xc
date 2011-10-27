@@ -8,29 +8,6 @@
 #include <stdio.h>
 
 #pragma unsafe arrays
-static inline int sineValue(int sine[], int index, int N, int total) {
-    int quart = total >> 2;
-    int sgn = 1;
-    index &= total - 1;
-    if (index > quart * 2) {
-        sgn = -1;
-        index -= quart*2;
-    }
-    if (index <= quart) {
-        return sgn * sine[index];
-    }
-    return sgn * sine[2*quart - index];
-}
-
-static inline int cosValue(int sine[], int k, int N, int total) {
-    return sineValue(sine, k*(total/N) + (total/4), N, total);
-}
-
-static inline int sinValue(int sine[], int k, int N, int total) {
-    return sineValue(sine, k*(total/N), N, total);
-}
-
-#pragma unsafe arrays
 void fftTwiddle(int re[], int im[], int N) {
     unsigned int shift = clz(N);
     for(unsigned int i = 1; i < N-1; i++) {
@@ -48,11 +25,14 @@ void fftTwiddle(int re[], int im[], int N) {
 
 #pragma unsafe arrays
 void fftForward(int re[], int im[], int N, int sine[]) {
-    for(int step = 2; step <= N; step = step * 2) {
-        int step2 = step >> 1;
-        for(int k = 0; k < step2; k++) {
-            int rRe = cosValue(sine, k, step, N);
-            int rIm = -sinValue(sine, k, step, N);
+    unsigned int shift = 30-clz(N);
+    for(unsigned int step = 2 ; step <= N; step = step * 2, shift--) {
+        unsigned int step2 = step >> 1;
+        unsigned int step4 = step2 >> 1;
+        unsigned int k;
+        for(k = 0; k < step4 + (step2&1); k++) {
+            int rRe = sine[(N>>2)-(k<<shift)];
+            int rIm = sine[k<<shift];
             for(int block = k; block < k+N; block+=step) {
                 int tRe = re[block];
                 int tIm = im[block];
@@ -61,12 +41,37 @@ void fftForward(int re[], int im[], int N, int sine[]) {
                 int h;
                 unsigned l;
                 int sRe2, sIm2;
-                {h,l} = macs(tRe2, rRe, 0, 0x40000000);
-                {h,l} = macs(tIm2, -rIm, h, l);
-                sRe2 = h << 1 | l >> 31;
-                {h,l} = macs(tRe2, rIm, 0, 0x40000000);
+                {h,l} = macs(tRe2, rRe, 0, 0x80000000);
+                {h,l} = macs(tIm2, rIm, h, l);
+                sRe2 = h;
+                {h,l} = macs(tRe2, -rIm, 0, 0x80000000);
                 {h,l} = macs(tIm2, rRe, h, l);
-                sIm2 = h << 1 | l >> 31;
+                sIm2 = h;
+                tRe >>= 1;
+                tIm >>= 1;
+                re[block] = tRe + sRe2;
+                im[block] = tIm + sIm2;
+                re[block+step2] = tRe - sRe2;
+                im[block+step2] = tIm - sIm2;
+            }
+        }
+        for(k=(step2 & 1); k < step2-step4; k++) {
+            int rRe = -sine[k<<shift];
+            int rIm = sine[(N>>2)-(k<<shift)];
+            for(int block = k+step4; block < k+step4+N; block+=step) {
+                int tRe = re[block];
+                int tIm = im[block];
+                int tRe2 = re[block + step2];
+                int tIm2 = im[block + step2];
+                int h;
+                unsigned l;
+                int sRe2, sIm2;
+                {h,l} = macs(tRe2, rRe, 0, 0x80000000);
+                {h,l} = macs(tIm2, rIm, h, l);
+                sRe2 = h;
+                {h,l} = macs(tRe2, -rIm, 0, 0x80000000);
+                {h,l} = macs(tIm2, rRe, h, l);
+                sIm2 = h;
                 tRe >>= 1;
                 tIm >>= 1;
                 re[block] = tRe + sRe2;
@@ -78,13 +83,18 @@ void fftForward(int re[], int im[], int N, int sine[]) {
     }
 }
 
+// Note: for an extra bit of precision change the 8 lines that use 0x80000000 or l>>31.
+
 #pragma unsafe arrays
 void fftInverse(int re[], int im[], int N, int sine[]) {
-    for(int step = 2; step <= N; step = step * 2) {
-        int step2 = step >> 1;
-        for(int k = 0; k < step2; k++) {
-            int rRe = cosValue(sine, k, step, N);
-            int rIm = sinValue(sine, k, step, N);
+    unsigned int shift = 30-clz(N);
+    for(unsigned int step = 2 ; step <= N; step = step * 2, shift--) {
+        unsigned int step2 = step >> 1;
+        unsigned int step4 = step2 >> 1;
+        unsigned int k;
+        for(k = 0; k < step4 + (step2&1); k++) {
+            int rRe = sine[(N>>2)-(k<<shift)];
+            int rIm = sine[k<<shift];
             for(int block = k; block < k+N; block+=step) {
                 int tRe = re[block];
                 int tIm = im[block];
@@ -93,12 +103,36 @@ void fftInverse(int re[], int im[], int N, int sine[]) {
                 int h;
                 unsigned l;
                 int sRe2, sIm2;
-                {h,l} = macs(tRe2, rRe, 0, 0x20000000);
+                {h,l} = macs(tRe2, rRe, 0, 0x80000000);  // Make this 0x40000000
                 {h,l} = macs(tIm2, -rIm, h, l);
-                sRe2 = h << 2 | l >> 30;
-                {h,l} = macs(tRe2, rIm, 0, 0x20000000);
+                sRe2 = h << 1;// | l >> 31;              // And include this part
+                {h,l} = macs(tRe2, rIm, 0, 0x80000000);
                 {h,l} = macs(tIm2, rRe, h, l);
-                sIm2 = h << 2 | l >> 30;
+                sIm2 = h << 1;// | l >> 31;
+
+                re[block] = tRe + sRe2;
+                im[block] = tIm + sIm2;
+                re[block+step2] = tRe - sRe2;
+                im[block+step2] = tIm - sIm2;
+            }
+        }
+        for(k=(step2 & 1); k < step2-step4; k++) {
+            int rRe = -sine[k<<shift];
+            int rIm = sine[(N>>2)-(k<<shift)];
+            for(int block = k+step4; block < k+step4+N; block+=step) {
+                int tRe = re[block];
+                int tIm = im[block];
+                int tRe2 = re[block + step2];
+                int tIm2 = im[block + step2];
+                int h;
+                unsigned l;
+                int sRe2, sIm2;
+                {h,l} = macs(tRe2, rRe, 0, 0x80000000);
+                {h,l} = macs(tIm2, -rIm, h, l);
+                sRe2 = h << 1;// | l >> 31;
+                {h,l} = macs(tRe2, rIm, 0, 0x80000000);
+                {h,l} = macs(tIm2, rRe, h, l);
+                sIm2 = h << 1;// | l >> 31;
 
                 re[block] = tRe + sRe2;
                 im[block] = tIm + sIm2;

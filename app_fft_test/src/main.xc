@@ -10,7 +10,7 @@
 void fftTest8() {
     int re[8], im[8];
     for(int i = 0; i < 8; i++) {
-        re[i] = (i*i*i) & 255;//sinValue(sine_8, i, 8, 8)>>24;
+        re[i] = ((i*i*i) & 255) * 1000000;//sinValue(sine_8, i, 8, 8)>>24;
         im[i] = 0;//(737*i) & 255; //0; //cosValue(sine_8, i, 8, 8)>>24;
     }
     for(int i = 0; i < 8; i++) {
@@ -39,8 +39,8 @@ void fftTest8Large() {
     int ire[8], iim[8];
     int err = 0, sig = 0;
     for(int i = 0; i < 8; i++) {
-        ire[i] = re[i] = (i*i*i*1234567) & 0xFFFFFF;//sinValue(sine_8, i, 8, 8)>>24;
-        iim[i] = im[i] = (737123*i) & 0xFFFFFF; //0; //cosValue(sine_8, i, 8, 8)>>24;
+        ire[i] = re[i] = ((i*i*i*123) & 0xff) * 1000000;
+        iim[i] = im[i] = ((737123*i) & 0xFF) * 1000001;
     }
     fftTwiddle(re, im, 8);
     fftForward(re, im, 8, sine_8);
@@ -158,10 +158,11 @@ void fftTest1024() {
 }
 
 int main(void) {
+    fftTest64();
     fftTest8();
     fftTest8Large();
-    fftTest1024Large();
-    fftTest64();
     fftTest1024();
+    fftTest1024Large();
+    return 0;
     return 0;
 }
