@@ -17,7 +17,7 @@
  * \param N     number of points. Must be a power of 2, both re and im should be N long
  *
  * \param sine  array of N/4+1 sine values, each represented as a sign bit,
- *              an integral bit and a 30 bit fraction.
+ *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
  */
 void fftForward(int re[], int im[], int N, int sine[]);
 
@@ -35,11 +35,11 @@ void fftForward(int re[], int im[], int N, int sine[]);
  * \param N     number of points. Must be a power of 2, both re and im should be N long
  *
  * \param sine  array of N/4+1 sine values, each represented as a sign bit,
- *              an integral bit and a 30 bit fraction.
+ *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
  */
 void fftInverse(int re[], int im[], int N, int sine[]);
 
-/** THis function twiddles the arrays around prior to computing an FFT. A
+/** This function twiddles the arrays around prior to computing an FFT. A
  * calling sequence for a forward FFT involves fftTwiddle() followed by
  * fftForward(), and for an inverse FFT it involves fftTwiddle() followed
  * by fftInverse(). In some cases twiddling can be avoided, for example
