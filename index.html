@@ -69,7 +69,7 @@ fftInverse as quired.</p>
 <dt><dl class="function">
 <dt id="fftTwiddle">
 void <tt class="descname">fftTwiddle</tt><big>(</big>int<em>&nbsp;re[]</em>, int<em>&nbsp;im[]</em>, int<em>&nbsp;N</em><big>)</big><a class="headerlink" href="#fftTwiddle" title="Permalink to this definition">¶</a></dt>
-<dd><p>THis function twiddles the arrays around prior to computing an FFT.</p>
+<dd><p>This function twiddles the arrays around prior to computing an FFT.</p>
 <p>A calling sequence for a forward FFT involves <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> followed by <a class="reference internal" href="#fftForward" title="fftForward"><span>fftForward()</span></a>, and for an inverse FFT it involves <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> followed by <a class="reference internal" href="#fftInverse" title="fftInverse"><span>fftInverse()</span></a>. In some cases twiddling can be avoided, for example when computing a convolution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -99,7 +99,7 @@ void <tt class="descname">fftForward</tt><big>(</big>int<em>&nbsp;re[]</em>, int
 <li><strong>re</strong> &#8211; real part of each input point</li>
 <li><strong>im</strong> &#8211; imaginary part of each input point</li>
 <li><strong>N</strong> &#8211; number of points. Must be a power of 2, both re and im should be N long</li>
-<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, an integral bit and a 30 bit fraction.</li>
+<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, and a 31 bit fraction. 1 should be represented as 0x7fffffff.</li>
 </ul>
 </td>
 </tr>
@@ -120,7 +120,7 @@ void <tt class="descname">fftInverse</tt><big>(</big>int<em>&nbsp;re[]</em>, int
 <li><strong>re</strong> &#8211; real part of each input point</li>
 <li><strong>im</strong> &#8211; imaginary part of each input point</li>
 <li><strong>N</strong> &#8211; number of points. Must be a power of 2, both re and im should be N long</li>
-<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, an integral bit and a 30 bit fraction.</li>
+<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, and a 31 bit fraction. 1 should be represented as 0x7fffffff.</li>
 </ul>
 </td>
 </tr>

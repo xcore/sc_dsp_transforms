@@ -103,22 +103,22 @@ thread:</p>
 </tr>
 <tr><td>64</td>
 <td>886</td>
-<td>14011</td>
-<td>1650 Hz</td>
+<td>10810</td>
+<td>2137 Hz</td>
 <td>1 KB</td>
 <td>Implemented</td>
 </tr>
 <tr><td>1024</td>
 <td>14626</td>
-<td>317515</td>
-<td>75  Hz</td>
+<td>256340</td>
+<td>92  Hz</td>
 <td>2 KB</td>
 <td>Implemented</td>
 </tr>
 <tr><td>N</td>
-<td>3.5 N</td>
-<td>7.7 N log N</td>
-<td>50/...</td>
+<td>14 N</td>
+<td>25  N log N</td>
+<td>2/N log N</td>
 <td>1 KB + N</td>
 <td>Implemented</td>
 </tr>
@@ -128,10 +128,24 @@ thread:</p>
 a sin() lookup table. It excludes storage for the data points, which
 amounts to eight bytes per point (four bytes real part, and four bytes
 imaginary part).</p>
-<p>Note that there are a few more optimisations that could reduce the cycle
-count a bit, and that not performing rounding can further decrease cycle
-count.</p>
+<p>Note that there is a trade-off between rounding and accuracy - the inverse
+FFT can be made more accurate (one extra bit) at a cost of 5% extra
+instructions. This is marked in the code.</p>
 </div>
+</div>
+<div class="section" id="module-dct">
+<h1>module_dct<a class="headerlink" href="#module-dct" title="Permalink to this headline">¶</a></h1>
+<p>Performance (provided you can stream data in and out):</p>
+<ul class="simple">
+<li>three 50 MIPS threads compress approx 1.7 Msamples/s.</li>
+<li>QVGA greyscale: 22 fps in three 50 MIPS threads.</li>
+<li>VGA greyscale: 5 fps in three 50 MIPS threads.</li>
+<li>VGA greyscale: 14 fps in three 125 MIPS threads. With an extra DCT thread
+this may go up to 20 fps.</li>
+<li>Colour-images: approx two thirds of the speed?</li>
+</ul>
+<p>The performance depends on the compression ratio. When compressing
+marginally, Huffman encoding starts to take a serious amount of time.</p>
 </div>
 
 
