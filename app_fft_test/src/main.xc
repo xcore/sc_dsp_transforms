@@ -113,10 +113,12 @@ void fftTest64() {
     timer t;
     int t0, t1;
 
-    int re[64], im[64];
+    int re[64], im[64], ire[64], iim[64];
+    int err = 0, sig = 0;
+
     for(int i = 0; i < 64; i++) {
-        re[i] = (i*i*i) & 255;//sinValue(sine_64, i, 64, 64)/0x1000000;
-        im[i] = (737*i) & 255; //0; //cosValue(sine_64, i, 64, 64)>>24;
+        ire[i] = re[i] = (i*i*i*12345) & 65535;//sinValue(sine_64, i, 64, 64)/0x1000000;
+        iim[i] = im[i] = (73117*i) & 65535; //0; //cosValue(sine_64, i, 64, 64)>>24;
     }
     t :> t0;
     fftTwiddle(re, im, 64);
@@ -131,6 +133,11 @@ void fftTest64() {
     fftInverse(re, im, 64, sine_64);
     t :> t1;
     printf("Post 64 Inverse (%d ticks)\n", t1-t0);
+    for(int i = 0; i < 64; i++) {
+        err += sq(re[i] - ire[i]) + sq(im[i] - iim[i]);
+        sig += sq(ire[i]>>15) + sq(iim[i]>>15);
+    }
+    printf("1024 Point FFT: Sum Sig^2: %d * 10^9 Sum Err^2: %d\n", sig, err);
 }
 
 void fftTest1024() {

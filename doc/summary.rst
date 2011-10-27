@@ -33,17 +33,17 @@ forward or an inverse FFT. The maximum rate shows the rate for performing a
 twiddle, a forward FFT, a twiddle, and an inverse FFT on a single 50 MIPS
 thread:
 
-+----------+----------------------------+---------+----------+-------------+
-| Points   | Thread cycles              | Max rate| Memory   | Status      |
-|          +-------------+--------------+         |          |             |
-|          | Twiddle     | FFT          | FFT+Inv |          |             |
-+----------+-------------+--------------+---------+----------+-------------+
-| 64       | 886         | 10810        | 2137 Hz | 1 KB     | Implemented |
-+----------+-------------+--------------+---------+----------+-------------+
-| 1024     | 14626       | 256340       | 92  Hz  | 2 KB     | Implemented |
-+----------+-------------+--------------+---------+----------+-------------+
-| N        | 14 N        | 25  N log N  |2/N log N| 1 KB + N | Implemented |
-+----------+-------------+--------------+---------+----------+-------------+
++----------+----------------------------+---------+----------+---------+-------------+
+| Points   | Thread cycles              | Max rate| Error    | Memory  | Status      |
+|          +-------------+--------------+         |          |         |             |
+|          | Twiddle     | FFT          | FFT+Inv |          |         |             |
++----------+-------------+--------------+---------+----------+---------+-------------+
+| 64       | 886         | 10810        | 2137 Hz | 3-4 bits | 1 KB    | Implemented |
++----------+-------------+--------------+---------+----------+---------+-------------+
+| 1024     | 14626       | 256340       | 92  Hz  | 5-6 bits | 2 KB    | Implemented |
++----------+-------------+--------------+---------+----------+---------+-------------+
+| N        | 14 N        | 25  N log N  |2/N log N| N/2 bits |1 KB + N | Implemented |
++----------+-------------+--------------+---------+----------+---------+-------------+
 
 The memory required comprises roughly 1K of code, and then extra space for
 a sin() lookup table. It excludes storage for the data points, which
@@ -51,8 +51,9 @@ amounts to eight bytes per point (four bytes real part, and four bytes
 imaginary part).
 
 Note that there is a trade-off between rounding and accuracy - the inverse
-FFT can be made more accurate (one extra bit) at a cost of 5% extra
-instructions. This is marked in the code.
+FFT can be made more accurate (by half to one extra bit) at a cost of 5% extra
+instructions. This is marked in the code. The errors are indications only,
+maximum errors will be higher and are value dependent.
 
 module_dct
 ==========
