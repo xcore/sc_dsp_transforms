@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FFT &mdash; DSP transformations v0v1 documentation</title>
+    <title>Documentation &mdash; DSP transformations v0v1 documentation</title>
     <link rel="stylesheet" href="_static/xdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js"></script>
     <script type="text/javascript" src="_static/xcomment.js"></script>
-    <link rel="top" title="DSP transformations v0v1 documentation" href="#" /> 
+    <link rel="top" title="DSP transformations v0v1 documentation" href="#" />
+    <link rel="next" title="module_fft" href="fft.html" /> 
 
 <script>
 function setheight() {
@@ -50,110 +51,39 @@ document.getElementById('d1').style.height=h2 + "px";
         <div class="bodywrapper">
           <div class="body">
 <div style="float: right">
+<a href="fft.html"
+                        title="next chapter"> &gt&gt </a></p>
 </div>
 
             
-  <div class="section" id="fft">
-<h1>FFT<a class="headerlink" href="#fft" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="api">
-<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="sine-arrays">
-<h3>Sine arrays<a class="headerlink" href="#sine-arrays" title="Permalink to this headline">¶</a></h3>
-<p>The include file &#8220;sine.h&#8221; defines a set of arrays that are to be used with
-the FFT functions, called sine_8, sine_16, ..., sine_4096. Depending on the
-number of points, pick the appropriate array and pass it to fftForward and
-fftInverse as quired.</p>
-</div>
-<div class="section" id="fft-functions">
-<h3>FFT functions<a class="headerlink" href="#fft-functions" title="Permalink to this headline">¶</a></h3>
-<dt><dl class="function">
-<dt id="fftTwiddle">
-void <tt class="descname">fftTwiddle</tt><big>(</big>int<em>&nbsp;re[]</em>, int<em>&nbsp;im[]</em>, int<em>&nbsp;N</em><big>)</big><a class="headerlink" href="#fftTwiddle" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function twiddles the arrays around prior to computing an FFT.</p>
-<p>A calling sequence for a forward FFT involves <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> followed by <a class="reference internal" href="#fftForward" title="fftForward"><span>fftForward()</span></a>, and for an inverse FFT it involves <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> followed by <a class="reference internal" href="#fftInverse" title="fftInverse"><span>fftInverse()</span></a>. In some cases twiddling can be avoided, for example when computing a convolution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>re</strong> &#8211; real part of each input point</li>
-<li><strong>im</strong> &#8211; imaginary part of each input point</li>
-<li><strong>N</strong> &#8211; number of points. Must be a power of 2, both re and im should be N long</li>
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>This repository contains three modules: one module that performs functions
+to compute forward and inverse Fourier Transforms, one to to compute DCT
+transforms used in JPEG, and one that implements Huffman compression for
+JPEG.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fft.html">module_fft</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fft.html#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fft.html#sine-arrays">Sine arrays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fft.html#fft-functions">FFT functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fft.html#example-program">Example program</a></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dt><dl class="function">
-<dt id="fftForward">
-void <tt class="descname">fftForward</tt><big>(</big>int<em>&nbsp;re[]</em>, int<em>&nbsp;im[]</em>, int<em>&nbsp;N</em>, int<em>&nbsp;sine[]</em><big>)</big><a class="headerlink" href="#fftForward" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function computes a forward FFT.</p>
-<p>The complex input array is supplied as two arrays of integers, with numbers represented as fixed-point values. The number of points must be a power of 2, and the array of sine values should contain a quarter sine-wave. Use one of sine_N provided in sine.h. The function does not perform a bit-twiddle - if required then <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> should be called beforehand.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>re</strong> &#8211; real part of each input point</li>
-<li><strong>im</strong> &#8211; imaginary part of each input point</li>
-<li><strong>N</strong> &#8211; number of points. Must be a power of 2, both re and im should be N long</li>
-<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, and a 31 bit fraction. 1 should be represented as 0x7fffffff.</li>
+</li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dt><dl class="function">
-<dt id="fftInverse">
-void <tt class="descname">fftInverse</tt><big>(</big>int<em>&nbsp;re[]</em>, int<em>&nbsp;im[]</em>, int<em>&nbsp;N</em>, int<em>&nbsp;sine[]</em><big>)</big><a class="headerlink" href="#fftInverse" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function computes an inverse FFT.</p>
-<p>The complex input array is supplied as two arrays of integers, with numbers represented as fixed-point values. The number of points must be a power of 2, and the array of sine values should contain a quarter sine-wave. Use one of sine_N provided in sine.h. The function does not perform a bit-twiddle - if required then <a class="reference internal" href="#fftTwiddle" title="fftTwiddle"><span>fftTwiddle()</span></a> should be called beforehand.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>re</strong> &#8211; real part of each input point</li>
-<li><strong>im</strong> &#8211; imaginary part of each input point</li>
-<li><strong>N</strong> &#8211; number of points. Must be a power of 2, both re and im should be N long</li>
-<li><strong>sine</strong> &#8211; array of N/4+1 sine values, each represented as a sign bit, and a 31 bit fraction. 1 should be represented as 0x7fffffff.</li>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dct-jpeg.html">module_dct_jpeg</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dct-jpeg.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dct-jpeg.html#example-program">Example program</a></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="example-program">
-<h3>Example program<a class="headerlink" href="#example-program" title="Permalink to this headline">¶</a></h3>
-<p>Below is an example calling sequence:</p>
-<div class="highlight-none"><div class="highlight"><pre>#include &quot;fft.h&quot;
-#include &quot;sine.h&quot;
-
-int main(void) {
-  int re[8], im[8];
-
-  for(int i = 0; i &lt; 8; i++) {
-    // Fill re and im.
-  }
-  fftTwiddle(re, im, 8);
-  fftForward(re, im, 8, sine_8);
-
-  // Modify re and im, which are in the frequency domain
-
-  fftTwiddle(re, im, 8);
-  fftInverse(re, im, 8, sine_8);
-
-  // and back to the time domain
-}
-</pre></div>
-</div>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="huffman-jpeg.html">module_huffman_jpeg</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="huffman-jpeg.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="huffman-jpeg.html#example-program">Example program</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -165,6 +95,11 @@ int main(void) {
       <div class="sphinxsidebar" id='d2'>
         <div class="sphinxsidebarwrapper">
 <h3><a href="#">DSP transformations (0v1)</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fft.html">module_fft</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dct-jpeg.html">module_dct_jpeg</a></li>
+<li class="toctree-l1"><a class="reference internal" href="huffman-jpeg.html">module_huffman_jpeg</a></li>
+</ul>
 
 <div id="searchbox" style="display: none;margin-bottom: 10px;">
   <h3>Search</h3>
