@@ -23,17 +23,16 @@ DCT Functionality:
 
 FFT Functionality:
 
-* Forward FFT
-* Inverse FFT
-* Bit twiddling
-* Pre-initialised arrays with complex roots for up to 4096 points.
+* Forward complex FFT
+* Inverse complex FFT
+* Forward real FFT
+* Inverse real FFT
 * Example app that performs forwards and inverse FFT in sequence
 
 To Do
 =====
 
 * Interface DCT with a camera.
-* Optimise FFT, in particular calls to sin and cos.
 
 Firmware Overview
 =================
@@ -43,17 +42,17 @@ transforms on data, such as FFT, DCT, etc.
 
 There are three modules in the repo:
 
-* module_fdctint: forward quantising DCT.
+* module_dct_jpeg: forward quantising DCT.
   The process requires patches of 8x8 integer values, and in situ replace
   this with 8x8 transformed and quantised patches. 
 
-* module_jhuffman: Huffman encode for JPEG images (this may have to go in a
+* module_huffman_jpeg: Huffman encode for JPEG images (this may have to go in a
   different repo).
   The process requires patches of 8x8 integer values, and streams bits out
   over a (streaming) channel.
 
-* module_fft_simple: simple FFT (size must be a power of 2, straightforward
-  non-optimised code. 
+* module_fft_simple: complex FFT (size must be a power of 2), and real FFT
+  (two arrays of identical length that must both be a power of 2).
 
 Known Issues
 ============

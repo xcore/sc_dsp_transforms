@@ -10,7 +10,7 @@ API
 Sine arrays
 -----------
 
-The include file "sine.h" defines a set of arrays that are to be used with
+The include file "fft.h" defines a set of arrays that are to be used with
 the FFT functions, called sine_8[], sine_16[], ..., sine_8192[]. Depending on the
 number of points, pick the appropriate array and pass it to fftForward and
 fftInverse as required.
@@ -24,6 +24,10 @@ FFT functions
 
 .. doxygenfunction:: fftInverse
 
+.. doxygenfunction:: fftTwoRealsForward
+
+.. doxygenfunction:: fftTwoRealsInverse
+
 
 Example program
 ---------------
@@ -31,7 +35,6 @@ Example program
 Below is an example calling sequence::
 
   #include "fft.h"
-  #include "sine.h"
 
   int main(void) {
     int re[8], im[8];
