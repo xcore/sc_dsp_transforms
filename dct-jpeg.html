@@ -73,22 +73,82 @@ transformed by the DCT thread, whilst the third buffer is compressed using
 the huffman module.</p>
 <div class="section" id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">doxygenfunction: Cannot find function &#8220;forwardDCT&#8221; in doxygen xml output</p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">doxygenfunction: Cannot find function &#8220;doDCT&#8221; in doxygen xml output</p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">doxygenfunction: Cannot find function &#8220;endDCT&#8221; in doxygen xml output</p>
-</div>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">doxygenfunction: Cannot find function &#8220;quantDCT&#8221; in doxygen xml output</p>
-</div>
+<dt><dl class="function">
+<dt id="forwardDCT">
+void <tt class="descname">forwardDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em>, int<em>&nbsp;preprocessedQuant[65]</em><big>)</big><a class="headerlink" href="#forwardDCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs zero or more DCT operations, and quantises the result.</p>
+<p>Each block address is sent to the DCT process over the channel, and when done the address is sent out over the channel. It is streaming so that a block can always be waiting in the channel. This function should be running inside a thread, and is interfaced to through the streaming channel.</p>
+<p>The quant array should have been preprocessed using the quantDCT function.</p>
+<p>The functions doDCT and endDCT can be used to interact with the forwardDCT function; if full parallelism is required, then a block address should be sent over the channel, and subsequently a block address should be input for every block address that is output. Some form of double buffering is required to make sure that <a class="reference internal" href="#forwardDCT" title="forwardDCT"><span>forwardDCT()</span></a> &#8220;owns&#8221; the buffer that it operates on.</p>
+<p>This function does not return until it receives an &#8216;END&#8217; control token over its channel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blocks</strong> &#8211; The channel end to stream addresses of blocks over</li>
+<li><strong>preprocessedQuant</strong> &#8211; array of quantisation values.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dt><dl class="function">
+<dt id="doDCT">
+int <tt class="descname">doDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em>, int<em>&nbsp;dataBlock[64]</em><big>)</big><a class="headerlink" href="#doDCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an Interface function to synchronously perform a DCT operation on a single datablock.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blocks</strong> &#8211; The channelend that connects to the forwardDCT function.</li>
+<li><strong>dataBlock</strong> &#8211; an 8x8 array of integers on which to perform a quantised DCT.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dt><dl class="function">
+<dt id="endDCT">
+void <tt class="descname">endDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em><big>)</big><a class="headerlink" href="#endDCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This interface function terminates the forwardDCT function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blocks</strong> &#8211; The channelend that connects to the forwardDCT function.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dt><dl class="function">
+<dt id="quantDCT">
+void <tt class="descname">quantDCT</tt><big>(</big>int<em>&nbsp;preprocessedQuant[65]</em>, const unsigned char<em>&nbsp;quantisationTable[64]</em><big>)</big><a class="headerlink" href="#quantDCT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function preprocesses the quantisation table for use by forwardDCT.</p>
+<p>Note that the preprocessed table is one word longer than the input table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>quantisationTable</strong> &#8211; table with divider values for the quantisation process</li>
+<li><strong>preprocessedQuant</strong> &#8211; table to be passed to forwardDCT</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="example-program">
 <h2>Example program<a class="headerlink" href="#example-program" title="Permalink to this headline">¶</a></h2>
