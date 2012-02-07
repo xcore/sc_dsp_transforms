@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>DSP Transforms &mdash; DSP transformations v0v1 documentation</title>
+    <title>DSP Transforms &mdash; DSP transformations 0v1 documentation</title>
     <link rel="stylesheet" href="_static/xdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js"></script>
     <script type="text/javascript" src="_static/xcomment.js"></script>
-    <link rel="top" title="DSP transformations v0v1 documentation" href="index.html" /> 
+    <link rel="top" title="DSP transformations 0v1 documentation" href="index.html" />
+    <link rel="next" title="module_fft" href="fft.html" />
+    <link rel="prev" title="Documentation" href="index.html" /> 
 
 <script>
 function setheight() {
@@ -50,6 +52,10 @@ document.getElementById('d1').style.height=h2 + "px";
         <div class="bodywrapper">
           <div class="body">
 <div style="float: right">
+<a href="index.html"
+                        title="previous chapter"> &lt&lt </a>
+<a href="fft.html"
+                        title="next chapter"> &gt&gt </a></p>
 </div>
 
             
@@ -94,7 +100,7 @@ thread:</p>
 <col width="17%" />
 </colgroup>
 <tbody valign="top">
-<tr><td rowspan="2">Points</td>
+<tr class="row-odd"><td rowspan="2">Points</td>
 <td colspan="2">Thread cycles</td>
 <td rowspan="2"><p class="first">Max rate</p>
 <p class="last">FFT+Inv</p>
@@ -103,10 +109,10 @@ thread:</p>
 <td rowspan="2">Memory</td>
 <td rowspan="2">Status</td>
 </tr>
-<tr><td>Twiddle</td>
+<tr class="row-even"><td>Twiddle</td>
 <td>FFT</td>
 </tr>
-<tr><td>64</td>
+<tr class="row-odd"><td>64</td>
 <td>886</td>
 <td>10810</td>
 <td>2137 Hz</td>
@@ -114,7 +120,7 @@ thread:</p>
 <td>1 KB</td>
 <td>Implemented</td>
 </tr>
-<tr><td>1024</td>
+<tr class="row-even"><td>1024</td>
 <td>14626</td>
 <td>256340</td>
 <td>92  Hz</td>
@@ -122,7 +128,7 @@ thread:</p>
 <td>2 KB</td>
 <td>Implemented</td>
 </tr>
-<tr><td>N</td>
+<tr class="row-odd"><td>N</td>
 <td>14 N</td>
 <td>25  N log N</td>
 <td>2/N log N</td>
@@ -156,28 +162,28 @@ forward FFT, and an inverse FFT on a single 50 MIPS thread:</p>
 <col width="19%" />
 </colgroup>
 <tbody valign="top">
-<tr><td>Points</td>
+<tr class="row-odd"><td>Points</td>
 <td>Thread cycles</td>
 <td>Max rate</td>
 <td>Error</td>
 <td>Memory</td>
 <td>Status</td>
 </tr>
-<tr><td>2 x 64</td>
+<tr class="row-even"><td>2 x 64</td>
 <td>13332</td>
 <td>1875 Hz</td>
 <td>4 bits</td>
 <td>1 KB</td>
 <td>Implemented</td>
 </tr>
-<tr><td>2 x 1024</td>
+<tr class="row-odd"><td>2 x 1024</td>
 <td>294584</td>
 <td>85  Hz</td>
 <td>6 bits</td>
 <td>2 KB</td>
 <td>Implemented</td>
 </tr>
-<tr><td>2 x N</td>
+<tr class="row-even"><td>2 x N</td>
 <td>29  N log N</td>
 <td>1.8/N log N</td>
 <td>N/2+1 bits</td>
@@ -224,7 +230,16 @@ marginally, Huffman encoding starts to take a serious amount of time.</p>
       <div class="sphinxsidebar" id='d2'>
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">DSP transformations (0v1)</a></h3>
-<ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">DSP Transforms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-fft-simple">module_fft_simple</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#complex-fft">Complex FFT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#real-fft">Real FFT</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-dct-jpeg">module_dct_jpeg</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fft.html">module_fft</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dct-jpeg.html">module_dct_jpeg</a></li>
 <li class="toctree-l1"><a class="reference internal" href="huffman-jpeg.html">module_huffman_jpeg</a></li>

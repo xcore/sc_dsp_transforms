@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>module_dct_jpeg &mdash; DSP transformations v0v1 documentation</title>
+    <title>module_dct_jpeg &mdash; DSP transformations 0v1 documentation</title>
     <link rel="stylesheet" href="_static/xdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://mathjax.connectmv.com/MathJax.js"></script>
     <script type="text/javascript" src="_static/xcomment.js"></script>
-    <link rel="top" title="DSP transformations v0v1 documentation" href="index.html" />
+    <link rel="top" title="DSP transformations 0v1 documentation" href="index.html" />
     <link rel="next" title="module_huffman_jpeg" href="huffman-jpeg.html" />
     <link rel="prev" title="module_fft" href="fft.html" /> 
 
@@ -73,7 +73,7 @@ transformed by the DCT thread, whilst the third buffer is compressed using
 the huffman module.</p>
 <div class="section" id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
-<dt><dl class="function">
+<dl class="function">
 <dt id="forwardDCT">
 void <tt class="descname">forwardDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em>, int<em>&nbsp;preprocessedQuant[65]</em><big>)</big><a class="headerlink" href="#forwardDCT" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function performs zero or more DCT operations, and quantises the result.</p>
@@ -85,7 +85,7 @@ void <tt class="descname">forwardDCT</tt><big>(</big>streaming chanend<em>&nbsp;
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>blocks</strong> &#8211; The channel end to stream addresses of blocks over</li>
 <li><strong>preprocessedQuant</strong> &#8211; array of quantisation values.</li>
 </ul>
@@ -95,7 +95,7 @@ void <tt class="descname">forwardDCT</tt><big>(</big>streaming chanend<em>&nbsp;
 </table>
 </dd></dl>
 
-<dt><dl class="function">
+<dl class="function">
 <dt id="doDCT">
 int <tt class="descname">doDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em>, int<em>&nbsp;dataBlock[64]</em><big>)</big><a class="headerlink" href="#doDCT" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is an Interface function to synchronously perform a DCT operation on a single datablock.</p>
@@ -103,7 +103,7 @@ int <tt class="descname">doDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>blocks</strong> &#8211; The channelend that connects to the forwardDCT function.</li>
 <li><strong>dataBlock</strong> &#8211; an 8x8 array of integers on which to perform a quantised DCT.</li>
 </ul>
@@ -113,7 +113,7 @@ int <tt class="descname">doDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks
 </table>
 </dd></dl>
 
-<dt><dl class="function">
+<dl class="function">
 <dt id="endDCT">
 void <tt class="descname">endDCT</tt><big>(</big>streaming chanend<em>&nbsp;blocks</em><big>)</big><a class="headerlink" href="#endDCT" title="Permalink to this definition">¶</a></dt>
 <dd><p>This interface function terminates the forwardDCT function.</p>
@@ -121,7 +121,7 @@ void <tt class="descname">endDCT</tt><big>(</big>streaming chanend<em>&nbsp;bloc
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>blocks</strong> &#8211; The channelend that connects to the forwardDCT function.</li>
 </ul>
 </td>
@@ -130,7 +130,7 @@ void <tt class="descname">endDCT</tt><big>(</big>streaming chanend<em>&nbsp;bloc
 </table>
 </dd></dl>
 
-<dt><dl class="function">
+<dl class="function">
 <dt id="quantDCT">
 void <tt class="descname">quantDCT</tt><big>(</big>int<em>&nbsp;preprocessedQuant[65]</em>, const unsigned char<em>&nbsp;quantisationTable[64]</em><big>)</big><a class="headerlink" href="#quantDCT" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function preprocesses the quantisation table for use by forwardDCT.</p>
@@ -139,7 +139,7 @@ void <tt class="descname">quantDCT</tt><big>(</big>int<em>&nbsp;preprocessedQuan
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>quantisationTable</strong> &#8211; table with divider values for the quantisation process</li>
 <li><strong>preprocessedQuant</strong> &#8211; table to be passed to forwardDCT</li>
 </ul>
@@ -191,6 +191,8 @@ provideBlocks(toDCT, toHuffman);</dd>
         <div class="sphinxsidebarwrapper">
 <h3><a href="index.html">DSP transformations (0v1)</a></h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="summary.html">DSP Transforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html#module-dct-jpeg">module_dct_jpeg</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fft.html">module_fft</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">module_dct_jpeg</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
