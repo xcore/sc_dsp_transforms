@@ -8,6 +8,7 @@ JPEG.
 
 .. toctree::
 
+   summary.rst
    fft.rst
    dct-jpeg.rst
    huffman-jpeg.rst
