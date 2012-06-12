@@ -3,14 +3,16 @@
 #include "tiny_jpeg.h"
 #include "lcd_sdram_manager.h"
 #include <stdlib.h>
+#include <stdio.h>
 #define ERROR_CHECK
 
 int Decode(chanend server, unsigned image_no);
 extern void init_idct (void);
 extern void idct(short a []);
-unsigned char buf [256];
+#define PAGE_SIZE 256
+unsigned char buf [PAGE_SIZE];
 #define HUF_TBL_SIZE 256
-#define PAGE_SIZE 256;
+
 
 unsigned sector_address;
 unsigned cur_page_offset;
@@ -20,37 +22,41 @@ unsigned cur_page_offset;
  * offset must increase with each call. It will fetch the next page from
  * flash when needed, hence wont work in reverse.
  */
+#pragma unsafe arrays
 inline unsigned char getByte(unsigned offset){
   if(offset>>8 != cur_page_offset){
-    fl_readPage(sector_address  + (offset>>8) * 256, buf);
+    fl_readPage(sector_address  + (offset>>8) * PAGE_SIZE, buf);
     cur_page_offset = offset>>8;
   }
   return buf[offset&0xff];
 }
 
+#pragma unsafe arrays
 unsigned short getShort(unsigned offset){
   if(offset>>8 == cur_page_offset){
     char bottom = buf[offset&0xff];
     if((offset+1)>>8 == cur_page_offset){
       return (bottom<<8) | buf[(offset+1)&0xff];
     } else {
-      fl_readPage(sector_address  + (offset>>8) * 256, buf);
+      fl_readPage(sector_address  + (offset>>8) * PAGE_SIZE, buf);
       cur_page_offset++;
       return (bottom<<8) | buf[0];
     }
    } else {
-     fl_readPage(sector_address  + (offset>>8) * 256, buf);
+     fl_readPage(sector_address  + (offset>>8) * PAGE_SIZE, buf);
      cur_page_offset = offset>>8;
      return ( buf[offset&0xff]<<8) | buf[(offset+1)&0xff];
    }
 }
 
+#pragma unsafe arrays
 void load_jpeg_from_flash(chanend server, unsigned image_no, unsigned sectnum){
   sector_address = fl_getSectorAddress(sectnum);
   fl_readPage(sector_address, buf);
   Decode(server, image_no);
 }
 
+#pragma unsafe arrays
 static inline unsigned DecodeDQT(unsigned offset, unsigned char qtab[4][64]) {
   unsigned length = getShort(offset);
   offset += 2;
@@ -65,6 +71,7 @@ static inline unsigned DecodeDQT(unsigned offset, unsigned char qtab[4][64]) {
   return offset;
 }
 
+#pragma unsafe arrays
 static inline unsigned DecodeHuffBaselineDCT( unsigned offset, stComps &components) {
   unsigned length = getShort(offset);
 #ifdef ERROR_CHECK
@@ -91,6 +98,7 @@ static inline unsigned DecodeHuffBaselineDCT( unsigned offset, stComps &componen
   return offset + length;
 }
 
+#pragma unsafe arrays
 static inline unsigned DecodeHuffmanTableDef(unsigned offset, unsigned huffTableSize[4],
     huffEntry huffTable[4][HUF_TBL_SIZE]) {
 
@@ -138,37 +146,50 @@ static inline unsigned DecodeHuffmanTableDef(unsigned offset, unsigned huffTable
 
 unsigned g_streamOffset;
 unsigned g_bitOffset;
-unsigned char g_high, g_mid, g_low;
+unsigned g_stream_buffer;
+
 
 void initStream(unsigned offset) {
+  unsigned char t;
   g_streamOffset = offset;
   g_bitOffset = 0;
-  g_high = getByte(g_streamOffset) & 0xff;
-  g_streamOffset = g_streamOffset + 1 + (g_high == 0xff);
-  g_mid = getByte(g_streamOffset) & 0xff;
-  g_streamOffset = g_streamOffset + 1 + (g_mid == 0xff);
-  g_low = getByte(g_streamOffset) & 0xff;
+
+  t = getByte(g_streamOffset);
+  g_stream_buffer = t<<24;
+  g_streamOffset = g_streamOffset + 1 + (t == 0xff);
+
+  t = getByte(g_streamOffset);
+  g_stream_buffer |= t<<16;
+  g_streamOffset = g_streamOffset + 1 + (t == 0xff);
+
+  t = getByte(g_streamOffset);
+  g_stream_buffer |= t<<8;
+  g_streamOffset = g_streamOffset + 1 + (t == 0xff);
+
+  t = getByte(g_streamOffset);
+  g_stream_buffer |= t;
+  g_streamOffset = g_streamOffset + 1 + (t == 0xff);
 }
 
-inline short getStream() {
-  short next16bits = (g_high << (8 + g_bitOffset)) | (g_mid << (g_bitOffset));
-  if (g_bitOffset)
-    next16bits |= (g_low >> (8 - g_bitOffset));
-  return next16bits;
+static inline unsigned short getStream() {
+  return (unsigned short)(g_stream_buffer>>(16-g_bitOffset));
 }
 
-inline void advanceStream(char bits_matched) {
+static inline void advanceStream(char bits_matched) {
+  unsigned short t;
   g_bitOffset += bits_matched;
+  if(g_bitOffset<16) return;
   while (g_bitOffset > 8) {
     g_bitOffset -= 8;
-    g_high = g_mid;
-    g_mid = g_low;
-    g_streamOffset = g_streamOffset + 1 + (g_mid == 0xff);
-    g_low = getByte(g_streamOffset);
+    g_stream_buffer <<= 8;
+    t = getByte(g_streamOffset);
+    g_stream_buffer |= t;
+    g_streamOffset = g_streamOffset + 1 + (t == 0xff);
   }
 }
 
-inline unsigned char matchCode(unsigned short next16bits, huffEntry huffTable[HUF_TBL_SIZE], char &symbol) {
+#pragma unsafe arrays
+static inline unsigned char matchCode(unsigned short next16bits, const huffEntry huffTable[HUF_TBL_SIZE], char &symbol) {
   unsigned i = 0;
   while (i < HUF_TBL_SIZE) {
     unsigned short mask = next16bits >> (16 - huffTable[i].length);
@@ -181,15 +202,16 @@ inline unsigned char matchCode(unsigned short next16bits, huffEntry huffTable[HU
   return 0;
 }
 
-void DecodeChannel(short channel[64],
-    huffEntry huffTable[4][HUF_TBL_SIZE], unsigned dc_table, unsigned ac_table, short &prevDC,
-    unsigned char qt[4][64], char q) {
-  char symbol;
+
+#pragma unsafe arrays
+static void DecodeChannel(short channel[64],
+    const huffEntry huffTable[4][HUF_TBL_SIZE], unsigned dc_table, unsigned ac_table, short &prevDC,
+    const unsigned char qt[64]) {
+  unsigned char symbol;
   unsigned i;
   unsigned short next16bits = getStream();
   unsigned num_matched;
 
-  symbol = 1;
   i = 0;
 
   num_matched = matchCode(next16bits, huffTable[dc_table], symbol);
@@ -197,8 +219,12 @@ void DecodeChannel(short channel[64],
   advanceStream(num_matched);
   next16bits = getStream();
 
+  for(unsigned j=0;j<64;j++){
+    channel[j] = 0;
+  }
+
   if (symbol != 0) {
-    unsigned topbits = (symbol >> 4)&0xf;
+    unsigned topbits = (symbol >> 4);
     unsigned bottombits = symbol & 0xf;
     short additional = next16bits >> (16 - bottombits);
     short dc;
@@ -210,20 +236,24 @@ void DecodeChannel(short channel[64],
     advanceStream(bottombits);
     next16bits = getStream();
     topbits+=i;
-    if(topbits!=0){
-      exit(1);
-    }
     for(;i<topbits;i++){
       channel[dezigzag[i]] = 0;
     }
-    channel[dezigzag[i]] = (dc + prevDC) * qt[q][i];
+    channel[dezigzag[i]] = (dc + prevDC) * qt[i];
     prevDC = dc+ prevDC;
   } else {
-    channel[dezigzag[i]] = (0 + prevDC)* qt[q][i];
+    channel[dezigzag[i]] = (0 + prevDC)* qt[i];
     prevDC = 0+ prevDC;
   }
- /*
-  if (symbol != 0) {
+
+  i++;
+  num_matched = matchCode(next16bits, huffTable[ac_table], symbol);
+
+  while (symbol) {
+    advanceStream(num_matched);
+    next16bits = getStream();
+    {
+    unsigned topbits = (symbol >> 4)&0xf;
     unsigned bottombits = symbol & 0xf;
     short additional = next16bits >> (16 - bottombits);
     short dc;
@@ -234,50 +264,18 @@ void DecodeChannel(short channel[64],
     }
     advanceStream(bottombits);
     next16bits = getStream();
-    channel[0] = (dc + prevDC) * qt[q][i];
-    prevDC = dc+ prevDC;
-  } else {
-    channel[0] = prevDC* qt[q][i];
-  }
-*/
-  i++;
-  num_matched = matchCode(next16bits, huffTable[ac_table], symbol);
-
-  while (symbol) {
-    advanceStream(num_matched);
-    next16bits = getStream();
-    if (symbol != 0) {
-      unsigned topbits = (symbol >> 4)&0xf;
-      unsigned bottombits = symbol & 0xf;
-      short additional = next16bits >> (16 - bottombits);
-      short dc;
-      if (additional >> (bottombits - 1)) {
-        dc = additional;
-      } else {
-        dc = additional - (1 << (bottombits)) + 1;
-      }
-      advanceStream(bottombits);
-      next16bits = getStream();
-      topbits+=i;
-      for(;i<topbits;i++){
-        channel[dezigzag[i]] = 0;
-      }
-      channel[dezigzag[i]] = (dc ) * qt[q][i];
-    } else {
-      channel[dezigzag[i]] = (0 )* qt[q][i];
+    i+=topbits;
+    channel[dezigzag[i]] = dc * qt[i];
     }
     i++;
     num_matched = matchCode(next16bits, huffTable[ac_table], symbol);
   }
 
   advanceStream(num_matched);
-
-  while (i < 64) {
-    channel[dezigzag[i]] = 0;
-    i++;
-  }
 }
 
+
+/*
 inline unsigned char Clip(const int x) {
     return (x < 0) ? 0 : ((x > 0xFF) ? 0xFF : (unsigned char) x);
 }
@@ -292,10 +290,37 @@ inline unsigned short YCbCr_to_RGB565( short Y, short Cb, short Cr )
   int b = Clip((y + 454 * cb            + 128) >> 8);
   return (int)((r >> 3) & 0x1F) | ((int)((g >> 2) & 0x3F) << 5) | ((int)((b >> 3) & 0x1F) << 11);
 }
+*/
 
+
+#define bits 8
+#define const_a 1.402
+#define const_b 0.34414
+#define const_c 0.71414
+#define const_d 1.722
+#define const_A (int)(const_a*(1<<bits))
+#define const_B (int)(const_c*(1<<bits))
+#define const_C (int)(const_b*(1<<bits))
+#define const_D (int)(const_d*(1<<bits))
+
+inline unsigned short YCbCr_to_RGB565( short Y, short Cb, short Cr )
+{
+  register int y = Y << bits;
+  register int cb = Cb - 128;
+  register int cr = Cr - 128;
+  int r = (y + const_A * cr + 128) >> (bits+3);
+  int g = (y - const_B * cb - const_C * cr + 128) >> (bits+2);
+  int b = (y + const_D * cb + 128) >>(bits+3);
+  //r = (r<0)?0:(r>0x1f)?0x1f:r;
+  //g = (g<0)?0:(g>0x3f)?0x3f:g;
+  //b = (b<0)?0:(b>0x1f)?0x1f:b;
+  return r|(g<<5)|(b<<11);
+}
+
+#pragma unsafe arrays
 void DecodeScan(unsigned offset,
-    unsigned huffTableSize[4], huffEntry huffTable[4][HUF_TBL_SIZE],
-    unsigned char qt[4][64], stComps &components, chanend server, unsigned image_no) {
+    const unsigned huffTableSize[4], const huffEntry huffTable[4][HUF_TBL_SIZE],
+    const unsigned char qt[4][64], stComps &components, chanend server, const unsigned image_no) {
 
   short prevDC = 0, prevDCCr = 0, prevDCCb = 0;
   unsigned mcu_count = components.height * components.width / 16 / 16;
@@ -310,20 +335,20 @@ void DecodeScan(unsigned offset,
     unsigned ac_table_index = components.ac_table[Y];
     unsigned dc_table_index = components.dc_table[Y];
     unsigned qt_index = components.qt_table[Y];
-    DecodeChannel(components.Y[0], huffTable, dc_table_index, ac_table_index, prevDC, qt, qt_index);
-    DecodeChannel(components.Y[1], huffTable, dc_table_index, ac_table_index, prevDC, qt, qt_index);
-    DecodeChannel(components.Y[2], huffTable, dc_table_index, ac_table_index, prevDC, qt, qt_index);
-    DecodeChannel(components.Y[3], huffTable, dc_table_index, ac_table_index, prevDC, qt, qt_index);
+    DecodeChannel(components.Y[0], huffTable, dc_table_index, ac_table_index, prevDC, qt[qt_index]);
+    DecodeChannel(components.Y[1], huffTable, dc_table_index, ac_table_index, prevDC, qt[qt_index]);
+    DecodeChannel(components.Y[2], huffTable, dc_table_index, ac_table_index, prevDC, qt[qt_index]);
+    DecodeChannel(components.Y[3], huffTable, dc_table_index, ac_table_index, prevDC, qt[qt_index]);
 
     ac_table_index = components.ac_table[Cb];
     dc_table_index = components.dc_table[Cb];
     qt_index = components.qt_table[Cb];
-    DecodeChannel(components.Cb, huffTable, dc_table_index, ac_table_index, prevDCCb, qt, qt_index);
+    DecodeChannel(components.Cb, huffTable, dc_table_index, ac_table_index, prevDCCb, qt[qt_index]);
 
     ac_table_index = components.ac_table[Cr];
     dc_table_index = components.dc_table[Cr];
     qt_index = components.qt_table[Cr];
-    DecodeChannel(components.Cr, huffTable, dc_table_index, ac_table_index, prevDCCr, qt, qt_index);
+    DecodeChannel(components.Cr, huffTable, dc_table_index, ac_table_index, prevDCCr, qt[qt_index]);
 
     idct(components.Y[0]);
     idct(components.Y[1]);
@@ -332,30 +357,25 @@ void DecodeScan(unsigned offset,
     idct(components.Cb);
     idct(components.Cr);
 
-    for (unsigned j = 0; j < 64; j++) {
-      components.Y[0][j] = (components.Y[0][j] - 128) & 0xff;
-      components.Y[1][j] = (components.Y[1][j] - 128) & 0xff;
-      components.Y[2][j] = (components.Y[2][j] - 128) & 0xff;
-      components.Y[3][j] = (components.Y[3][j] - 128) & 0xff;
-      components.Cb[j] = (components.Cb[j] - 128) & 0xff;
-      components.Cr[j] = (components.Cr[j] - 128) & 0xff;
-    }
-
     //now reconstruct the rgb
     for (unsigned i = 0; i < 64; i++) {
-      short Cb = components.Cb[i];
-      short Cr = components.Cr[i];
+
       short y = (1&(i>>2)) + 2*(i>=32);
+      unsigned yy = 2*(i-(i&4)) &0x3f;
+      unsigned r = 4*i-(2*(i&0x7));
 
-      short Y0 = components.Y[y][2*(i-(i&4)) &0x3f];
-      short Y1 = components.Y[y][(2*(i-(i&4)) &0x3f)+1];
-      short Y2 = components.Y[y][(2*(i-(i&4)) &0x3f)+8];
-      short Y3 = components.Y[y][(2*(i-(i&4)) &0x3f) +9];
+      short Y0 = (components.Y[y][yy] - 128) & 0xff;
+      short Y1 = (components.Y[y][yy+1] - 128) & 0xff;
+      short Y2 = (components.Y[y][yy+8] - 128) & 0xff;
+      short Y3 = (components.Y[y][yy+9] - 128) & 0xff;
 
-      RGB[mcu&1][4*i-(2*(i&0x7))] = YCbCr_to_RGB565(Y0, Cb, Cr);
-      RGB[mcu&1][4*i-(2*(i&0x7))+1] = YCbCr_to_RGB565(Y1, Cb, Cr);
-      RGB[mcu&1][4*i-(2*(i&0x7))+16] = YCbCr_to_RGB565(Y2, Cb, Cr);
-      RGB[mcu&1][4*i-(2*(i&0x7))+17] = YCbCr_to_RGB565(Y3, Cb, Cr);
+      short Cb = (components.Cb[i] - 128) & 0xff;
+      short Cr = (components.Cr[i] - 128) & 0xff;
+
+      RGB[mcu&1][r] = YCbCr_to_RGB565(Y0, Cb, Cr);
+      RGB[mcu&1][r+1] = YCbCr_to_RGB565(Y1, Cb, Cr);
+      RGB[mcu&1][r+16] = YCbCr_to_RGB565(Y2, Cb, Cr);
+      RGB[mcu&1][r+17] = YCbCr_to_RGB565(Y3, Cb, Cr);
     }
 
     image_write_16x16_nonblocking(server, y_coord, x_coord, image_no, RGB[mcu&1]);
