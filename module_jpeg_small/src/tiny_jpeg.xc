@@ -293,7 +293,7 @@ inline unsigned short YCbCr_to_RGB565( short Y, short Cb, short Cr )
 */
 
 
-#define bits 8
+#define bits 5
 #define const_a 1.402
 #define const_b 0.34414
 #define const_c 0.71414
@@ -311,9 +311,9 @@ inline unsigned short YCbCr_to_RGB565( short Y, short Cb, short Cr )
   int r = (y + const_A * cr + 128) >> (bits+3);
   int g = (y - const_B * cb - const_C * cr + 128) >> (bits+2);
   int b = (y + const_D * cb + 128) >>(bits+3);
-  //r = (r<0)?0:(r>0x1f)?0x1f:r;
-  //g = (g<0)?0:(g>0x3f)?0x3f:g;
-  //b = (b<0)?0:(b>0x1f)?0x1f:b;
+  r = (r>>5)?((r<0)?0:0x1f):r;
+  g = (g>>6)?((g<0)?0:0x3f):g;
+  b = (b>>5)?((b<0)?0:0x1f):b;
   return r|(g<<5)|(b<<11);
 }
 
