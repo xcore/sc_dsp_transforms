@@ -123,6 +123,7 @@ void jpegtrailer() {
 void jpegPrinter(streaming chanend codes) {
     unsigned char c[20000];
     int cnt = 0;
+    unsigned char ct;
     while (!stestct(codes)) {
         unsigned char x;
         codes :> x;        
@@ -132,7 +133,8 @@ void jpegPrinter(streaming chanend codes) {
         }
 //        printf(".");
     }
-    soutct(codes, sinct(codes));
+    ct = sinct(codes);
+    soutct(codes, ct);
     jpegheader();
     for(int i = 0; i < cnt; i++) {
         header2(c[i]);
