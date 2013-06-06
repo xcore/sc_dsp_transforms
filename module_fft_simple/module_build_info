@@ -1,1 +1,1 @@
-MODULE_XCC_FLAGS = $(XCC_FLAGS) -O3 -Xassembler -fschedule
+MODULE_XCC_FLAGS = $(XCC_FLAGS) -O3 -Xassembler -fschedule -fllvm -save-temps

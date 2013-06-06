@@ -1,3 +1,10 @@
+// Copyright (c) 2011, XMOS Ltd, All rights reserved
+// This software is freely distributable under a derivative of the
+// University of Illinois/NCSA Open Source License posted in
+// LICENSE.txt and at <http://github.xcore.com/>
+
+/*! \file */
+
 /** This function computes the FFT of two real sequences in one go. It uses
  * a nifty trick (http://www.katjaas.nl/realFFT/realFFT.html) that enables
  * one to use a single complex FFT to compute two real FFTs simultaneously.
@@ -19,7 +26,10 @@
  *
  * \param[in]     N      number of points
  *
- * \param[in]     sine   table with sine values.
+ * \param[in]  sine  array of N/4+1 sine values, each represented as a sign bit,
+ *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
+ *              Arrays are provided in sine.h; for example, for a 1024 point
+ *              FFT use sin_1024.
  */
 void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int sine[]);
 
@@ -44,6 +54,9 @@ void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int s
  *
  * \param[in]     N      number of points
  *
- * \param[in]     sine   table with sine values.
+ * \param[in] sine  array of N/4+1 sine values, each represented as a sign bit,
+ *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
+ *              Arrays are provided in sine.h; for example, for a 1024 point
+ *              FFT use sin_1024.
  */
 void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, int sine[]);

@@ -2,6 +2,8 @@
 // This software is freely distributable under a derivative of the
 // University of Illinois/NCSA Open Source License posted in
 // LICENSE.txt and at <http://github.xcore.com/>
+/*! \file */
+
 
 /** This function computes a forward FFT. The complex input array is
  * supplied as two arrays of integers, with numbers represented as
@@ -18,6 +20,8 @@
  *
  * \param sine  array of N/4+1 sine values, each represented as a sign bit,
  *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
+ *              Arrays are provided in sine.h; for example, for a 1024 point
+ *              FFT use sin_1024.
  */
 void fftForward(int re[], int im[], int N, int sine[]);
 
@@ -36,6 +40,8 @@ void fftForward(int re[], int im[], int N, int sine[]);
  *
  * \param sine  array of N/4+1 sine values, each represented as a sign bit,
  *              and a 31 bit fraction. 1 should be represented as 0x7fffffff.
+ *              Arrays are provided in sine.h; for example, for a 1024 point
+ *              FFT use sin_1024.
  */
 void fftInverse(int re[], int im[], int N, int sine[]);
 

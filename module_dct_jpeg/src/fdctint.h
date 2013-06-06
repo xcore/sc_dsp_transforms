@@ -3,6 +3,8 @@
 // University of Illinois/NCSA Open Source License posted in
 // LICENSE.txt and at <http://github.xcore.com/>
 
+/*! \file */
+
 /** This function performs zero or more DCT operations, and quantises the
  * result. Each block address is sent to the DCT process over the channel,
  * and when done the address is sent out over the channel. It is streaming
