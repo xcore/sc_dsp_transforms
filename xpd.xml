@@ -22,6 +22,8 @@
     <exclude_dir>module_window</exclude_dir>
     <exclude_dir>app_frequency_shift</exclude_dir>
     <exclude_dir>module_huffman_jpeg</exclude_dir>
+    <docdir>app_fft_test/doc_quickstart</docdir>
+    <docdir>module_simple_fft/doc</docdir>
     <location>https://github.com/xcore/sc_dsp_transforms.git</location>
     <name>sc_dsp_transforms</name>
     <maintainer>XMOS</maintainer>
