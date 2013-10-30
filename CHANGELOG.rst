@@ -1,5 +1,5 @@
-Display Controller Change Log
-=============================
+DSP Transforms Function Library
+===============================
 
 1.0.0
 -----

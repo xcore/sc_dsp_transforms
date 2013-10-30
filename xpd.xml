@@ -6,6 +6,12 @@
             <keyword>DSP</keyword>
             <keyword>FFT</keyword>
         </component>
+        <component description = "Simple testbench to demonstrate use of the Simple FFT Library" type = "demoCode" scope = "Example" path = "app_fft_test" local = "false" id = "app_fft_test" name = "Simple FFT Function Library Tests">
+            <board></board>
+            <componentDependency>module_fft_simple</componentDependency>
+            <keyword>DSP</keyword>
+            <keyword>FFT</keyword>
+        </component>
     </components>
     <description>a range of utility modules for common dsp functions</description>
     <exclude_dir>app_fdct_test</exclude_dir>
