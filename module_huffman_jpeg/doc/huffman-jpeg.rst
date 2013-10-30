@@ -1,9 +1,9 @@
 module_huffman_jpeg
-'''''''''''''''''''
+===================
 
 
 API
-===
+---
 
 .. doxygenfunction:: doHuff
 
@@ -13,5 +13,5 @@ API
 
  
 Example program
-===============
+---------------
 
