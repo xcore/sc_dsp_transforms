@@ -4,7 +4,7 @@
 // LICENSE.txt and at <http://github.xcore.com/>
 
 /** Function that computes a Hann window over a set of input points.
- * 
+ *
  * \param[out] output Array of N points in which the windowed data will be
  *                    stored.
  *

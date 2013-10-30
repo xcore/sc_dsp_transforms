@@ -13,7 +13,7 @@ int dataOut[N+M];
 
 int mysin(int x) {
     x = x % 360;
- 
+
     if (x <= 90) {
         return sine_4096[x * 1024/90];
     }

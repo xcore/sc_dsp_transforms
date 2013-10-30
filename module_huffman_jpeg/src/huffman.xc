@@ -36,7 +36,7 @@ static void emitter(streaming chanend codes, streaming chanend generator) {
             codes <: (unsigned char) (bits >> l);
             numbits &= 7;
         }
-    }    
+    }
 }
 
 static inline void emit(streaming chanend emit, unsigned char length, int code) {
@@ -96,7 +96,7 @@ static void huffEncode(streaming chanend blocks, streaming chanend emitter) {
         exp = magnitude(t);
         emit(emitter, dclengths[exp], dccodes[exp]);
         emit(emitter, exp, dcdiff);
-        
+
 #pragma loop unroll(3)
         for(int i = 0; i < 63; i++) {
             int o = ordering[i];

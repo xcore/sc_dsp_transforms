@@ -53,5 +53,5 @@ void readImage(void) {
 }
 
 void header2(int header) {
-    fputc(header, fd);    
+    fputc(header, fd);
 }

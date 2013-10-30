@@ -15,7 +15,7 @@ void fftRealTest() {
     int im3[8] = {0,0,0,0,0,0,0,0};
     int im4[8] = {0,0,0,0,0,0,0,0};
     timer t; int t0,t1;
-    
+
     printf("FORWARDING\n");
     fftTwiddle(re3, im3, 8);
     fftForward(re3, im3, 8, sine_8);
@@ -26,8 +26,8 @@ t :> t0;
 t :> t1;
     printf("Ticks: %d\n", t1-t0);
     for(int i = 0; i < 8; i++) {
-        printf("%8d + %8d i = %8d + %8d i  ;  %8d + %8d i = %8d + %8d i\n", 
-               re1[i], im1[i], re3[i], im3[i], 
+        printf("%8d + %8d i = %8d + %8d i  ;  %8d + %8d i = %8d + %8d i\n",
+               re1[i], im1[i], re3[i], im3[i],
                re2[i], im2[i], re4[i], im4[i]);
     }
     printf("INVERSING\n");
@@ -37,11 +37,11 @@ t :> t1;
     fftInverse(re4, im4, 8, sine_8);
     fftTwoRealsInverse(re1, re2, im1, im2, 8, sine_8);
     for(int i = 0; i < 8; i++) {
-        printf("%8d + %8d i = %8d + %8d i  ;  %8d + %8d i = %8d + %8d i\n", 
-               re1[i], 0, re3[i], im3[i], 
+        printf("%8d + %8d i = %8d + %8d i  ;  %8d + %8d i = %8d + %8d i\n",
+               re1[i], 0, re3[i], im3[i],
                re2[i], 0, re4[i], im4[i]);
     }
-    
+
 }
 
 
@@ -87,7 +87,7 @@ void fftTest8Large() {
     fftTwiddle(re, im, 8);
     fftInverse(re, im, 8, sine_8);
     printf("Post Inverse\n");
-    
+
     for(int i = 0; i < 8; i++) {
         err += sq(re[i] - ire[i]) + sq(im[i] - iim[i]);
         sig += sq(ire[i]>>15) + sq(iim[i]>>15);
@@ -109,7 +109,7 @@ void fftTest1024Large() {
     fftTwiddle(re, im, 1024);
     fftInverse(re, im, 1024, sine_1024);
     printf("Post Inverse\n");
-    
+
     for(int i = 0; i < 1024; i++) {
         err += sq(re[i] - ire[i]) + sq(im[i] - iim[i]);
         sig += sq(ire[i]>>15) + sq(iim[i]>>15);

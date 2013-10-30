@@ -7,7 +7,7 @@
 #include "fft.h"
 
 
-#pragma unsafe arrays 
+#pragma unsafe arrays
 void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int sine[]) {
     fftTwiddle(re1, re2, N);
     fftForward(re1, re2, N, sine);
@@ -24,10 +24,10 @@ void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int s
         re1[N-i] = re1[i];
         re2[i] = (re2[i] + re2[N-i])>>1;
         re2[N-i] = re2[i];
-    }    
+    }
 }
 
-#pragma unsafe arrays 
+#pragma unsafe arrays
 void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, int sine[]) {
     for(int i = N >> 1; i != 0; i--) {
         re1[i] = re1[i] + im2[N-i];

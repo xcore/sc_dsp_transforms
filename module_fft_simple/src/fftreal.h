@@ -40,16 +40,16 @@ void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int s
  * simultaneously. The outputs are in the two real arrays, the imaginary
  * arrays are unchanged.
  *
- * \param[in,out] re1    real part of first set of complex numbers on which 
+ * \param[in,out] re1    real part of first set of complex numbers on which
  *                       to compute inverse FFT
  *
- * \param[in,out] re2    real part of second set of complex numbers on which 
+ * \param[in,out] re2    real part of second set of complex numbers on which
  *                       to compute inverse FFT
  *
- * \param[in]     im1    imaginary part of first set of complex numbers on which 
+ * \param[in]     im1    imaginary part of first set of complex numbers on which
  *                       to compute inverse FFT
  *
- * \param[in]     im2    imaginary part of second set of complex numbers on which 
+ * \param[in]     im2    imaginary part of second set of complex numbers on which
  *                       to compute inverse FFT
  *
  * \param[in]     N      number of points

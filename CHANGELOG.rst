@@ -1,5 +1,6 @@
-DSP Transforms Function Library
-===============================
+sc_dsp_transforms Change Log
+============================
+
 
 1.0.0
 -----

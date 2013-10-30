@@ -41,7 +41,7 @@ extern void forwardDCT(streaming chanend blocks, int preprocessedQuant[65]);
  *
  * \param dataBlock an 8x8 array of integers on which to perform a
  *                  quantised DCT.
- * 
+ *
  * \sa forwardDCT
  */
 extern int doDCT(streaming chanend blocks, int dataBlock[64]);

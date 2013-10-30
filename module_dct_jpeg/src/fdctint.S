@@ -14,9 +14,9 @@
 
     .globl   doDCT.nstackwords
     .linkset doDCT.nstackwords, 0
-    
+
     .globl doDCT
-    
+
     .align 4
 doDCT:
     out   res[r0], r1
@@ -26,15 +26,15 @@ doDCT:
 
     .globl   endDCT.nstackwords
     .linkset endDCT.nstackwords, 0
-    
+
     .globl endDCT
-    
+
     .align 4
 endDCT:
     outct res[r0], 5
     chkct res[r0], 5
     retsp 0
-   
+
 #define FIX_0_298631336  (  2446)	/* FIX(0.298631336) */
 #define FIX_0_390180644  (  3196)	/* FIX(0.390180644) */
 #define FIX_0_541196100  (  4433)	/* FIX(0.541196100) */
@@ -52,7 +52,7 @@ endDCT:
 
     .globl   forwardDCT.nstackwords
     .linkset forwardDCT.nstackwords, N
-    
+
     .globl forwardDCT
 
     .align 4
@@ -70,16 +70,16 @@ forwardDCT:
     stw cp, sp[9]
     stw r0, sp[10]
     stw r1, sp[11]
-    
+
 blockLoop:
     ldw cp, sp[11]
     testct r1, res[r0]
-    bt r1, noMoreBlocks 
+    bt r1, noMoreBlocks
     in r1, res[r0]
     set dp, r1
     stw r1, sp[12]
     ldc r11, 0                         // Just misalign nextRow - improves performance.
-    
+
 nextRow:
     ldw r0, dp[0]
     ldw r11, dp[7]
@@ -100,24 +100,24 @@ nextRow:
     ldw r11, dp[4]
     sub r4, r3, r11
     add r3, r3, r11
-    
-    add r10, r0, r3            
-    sub  r9, r0, r3            
+
+    add r10, r0, r3
+    sub  r9, r0, r3
     add r11, r1, r2           // r0 & r3 dead
     sub  r8, r1, r2           // r1 & r2 dead
-        
+
     add r0, r10, r11
     ldc r1, 1024               // Bias term - take 128 offset in all pixels out.
     sub r0, r0, r1
     shl r0, r0, 2
     stw r0, dp[0]
-    
+
     sub r0, r10, r11
     shl r0, r0, 2
     stw r0, dp[4]            // r10, r11 dead.
 
     ldc r2, 11
-    
+
     add r0, r8, r9
     ldc r1,  FIX_0_541196100
     mul r0, r0, r1
@@ -157,7 +157,7 @@ nextRow:
     mul r3, r3, r10
     ldc r10, FIX_0_390180644
     mul r0, r0, r10
-    
+
     sub r3, r11, r3
     sub r0, r11, r0
 
@@ -196,11 +196,11 @@ nextRow:
 // End of ROW pass
 
     ldw cp, sp[11]
-    
+
 //    extsp 8
 
    // .align 4
-nextColumn: 
+nextColumn:
     ldw r0, dp[0*8]
     ldw r11, dp[7*8]
     sub r7, r0, r11
@@ -220,9 +220,9 @@ nextColumn:
     ldw r11, dp[4*8]
     sub r4, r3, r11
     add r3, r3, r11
-    
-    add r10, r0, r3            
-    sub  r9, r0, r3            
+
+    add r10, r0, r3
+    sub  r9, r0, r3
     add r11, r1, r2           // r0 & r3 dead
     sub  r8, r1, r2           // r1 & r2 dead
 
@@ -234,7 +234,7 @@ nextColumn:
     shl r3, r3, 24
     maccs r2, r3, r1, r0
     stw r2, dp[0*8]
-    
+
     sub r0, r10, r11
     ashr r0, r0, 2
     ldw r1, cp[4*8]
@@ -245,7 +245,7 @@ nextColumn:
     stw r2, dp[4*8]            // r10, r11 dead.
 
     ldc r10, 15
-    
+
     add r0, r8, r9
     ldc r1,  FIX_0_541196100
     mul r0, r0, r1
@@ -295,10 +295,10 @@ nextColumn:
     mul r3, r3, r10
     ldc r10, FIX_0_390180644
     mul r0, r0, r10
-    
+
     sub r3, r11, r3
     sub r0, r11, r0
-    
+
     ldc r10, 15
 
     sub r4, r4, r1
@@ -355,7 +355,7 @@ nextColumn:
 noMoreBlocks:
     inct r1, res[r0]
     outct res[r0], r1
-    
+
     ldw r4, sp[0]
     ldw r5, sp[1]
     ldw r6, sp[2]

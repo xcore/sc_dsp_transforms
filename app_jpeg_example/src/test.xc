@@ -87,11 +87,11 @@ void jpegheader(void) {
     header4(ySize); // Y
     header4(xSize); // X
     header2(1); // Number
-    
-    header2(0); // 
+
+    header2(0); //
     header2(0x11); // KX/Y ratios
     header2(0); // Quantisation table index
-    
+
     header4(DQT);
     header4(67);
     header2(0x00);
@@ -99,17 +99,17 @@ void jpegheader(void) {
     for(int i = 0; i < 63; i++) {
         header2(quant[(int)ordering[i]]);
     }
-    
+
     hufftableprint(dclengths, dccodes, 12, 0);
     hufftableprint(aclengths, accodes, 176, 1);
-    
+
     header4(SOS);
     header4(8); // length
-    header2(1); 
-    
-    header2(0); // Scan components 
+    header2(1);
+
+    header2(0); // Scan components
     header2(0x00); // Entropy encoding tables
-    
+
     header2(0); // Scan start
     header2(63); // Scan end
     header2(0x00); // Ahl
@@ -126,7 +126,7 @@ void jpegPrinter(streaming chanend codes) {
     unsigned char ct;
     while (!stestct(codes)) {
         unsigned char x;
-        codes :> x;        
+        codes :> x;
         c[cnt++] = x;
         if (x == 0xff) {
             c[cnt++] = 0;
@@ -186,7 +186,7 @@ static void fill(streaming chanend blocks, streaming chanend toHuff, int block[]
         break;
     }
 }
-    
+
 void feed(streaming chanend blocks, streaming chanend toHuff) {
     int block0[64];
     int block1[64];

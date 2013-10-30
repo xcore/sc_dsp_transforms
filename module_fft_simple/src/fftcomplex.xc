@@ -144,8 +144,3 @@ void fftInverse(int re[], int im[], int N, int sine[]) {
     }
 }
 
-// TODO.
-
-complexMagnitudeSquared(int re[], int im[], int magnitude[], int N) {
-
-}
