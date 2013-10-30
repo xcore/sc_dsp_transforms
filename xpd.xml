@@ -26,6 +26,7 @@
     <name>sc_dsp_transforms</name>
     <maintainer>XMOS</maintainer>
     <partnumber>XM-004216-DH</partnumber>
+    <release parenthash = "b9e84423a543b413e403cb01663dcdab1215cb1b" version = "1.0.0beta0"></release>
     <subpartnumber>XM-004217-SM</subpartnumber>
     <vendor>XMOS</vendor>
     <version_defines></version_defines>

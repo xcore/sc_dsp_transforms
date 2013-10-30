@@ -1,13 +1,12 @@
 sc_dsp_transforms
 .................
 
-:Stable release:  unreleased
+:Latest release: 1.0.0beta0
+:Maintainer: XMOS
+:Description: a range of utility modules for common dsp functions
 
-:Status:  draft
 
-:Maintainer:  https://github.com/henkmuller
 
-:Description:  DCT, FFT, and other transforms
 
 
 Key Features
@@ -61,12 +60,13 @@ Known Issues
   This is not covered by LICENSE.TXT but has its own original LICENSE in an
   accompanying README file.
 
-Required Repositories
-=====================
-
-* xcommon git\@github.com:xcore/xcommon.git
-
 Support
 =======
 
 None at present
+
+Required software (dependencies)
+================================
+
+  * None
+
