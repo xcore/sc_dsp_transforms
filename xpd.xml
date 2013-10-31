@@ -8,12 +8,14 @@
         </component>
         <component description = "Simple testbench to demonstrate use of the Simple FFT Library" type = "demoCode" scope = "Example" path = "app_fft_test" local = "false" id = "app_fft_test" name = "Simple FFT Function Library Tests">
             <board></board>
-            <componentDependency>module_fft_simple</componentDependency>
+            <componentDependency version = "1.0.0">module_fft_simple</componentDependency>
             <keyword>DSP</keyword>
             <keyword>FFT</keyword>
         </component>
     </components>
     <description>a range of utility modules for common dsp functions</description>
+    <docdir>app_fft_test/doc_quickstart</docdir>
+    <docdir>module_simple_fft/doc</docdir>
     <exclude_dir>app_fdct_test</exclude_dir>
     <exclude_dir>app_jpeg_example</exclude_dir>
     <exclude_dir>example.pbm</exclude_dir>
@@ -22,13 +24,12 @@
     <exclude_dir>module_window</exclude_dir>
     <exclude_dir>app_frequency_shift</exclude_dir>
     <exclude_dir>module_huffman_jpeg</exclude_dir>
-    <docdir>app_fft_test/doc_quickstart</docdir>
-    <docdir>module_simple_fft/doc</docdir>
     <location>https://github.com/xcore/sc_dsp_transforms.git</location>
     <name>sc_dsp_transforms</name>
     <maintainer>XMOS</maintainer>
     <partnumber>XM-004216-DH</partnumber>
-    <release parenthash = "b9e84423a543b413e403cb01663dcdab1215cb1b" version = "1.0.0beta0"></release>
+    <release parenthash = "b9e84423a543b413e403cb01663dcdab1215cb1b" version = "1.0.0beta0" githash = "b505e86ad16b351c25de38e5ef91e7c912e09db3"></release>
+    <release parenthash = "57d977d477beec0f2ab42d0119a093d1ad4a45cc" version = "1.0.0rc0"></release>
     <subpartnumber>XM-004217-SM</subpartnumber>
     <vendor>XMOS</vendor>
     <version_defines></version_defines>
