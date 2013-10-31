@@ -15,7 +15,7 @@
     </components>
     <description>a range of utility modules for common dsp functions</description>
     <docdir>app_fft_test/doc_quickstart</docdir>
-    <docdir>module_simple_fft/doc</docdir>
+    <docdir>module_fft_simple/doc</docdir>
     <exclude_dir>app_fdct_test</exclude_dir>
     <exclude_dir>app_jpeg_example</exclude_dir>
     <exclude_dir>example.pbm</exclude_dir>
