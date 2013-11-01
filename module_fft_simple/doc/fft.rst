@@ -1,3 +1,6 @@
+Simple FFT Function Library
+===========================
+
 Overview
 --------
 
@@ -7,10 +10,9 @@ between the time and frequency domains.
 There are shelves of textbooks that cover filtering; a two-page summary is
 necessarily incomplete. Typical characterisations of transformations include:
 
-   * The number of points. This is the number of smaples on which to run the
-  transform.
+   * The number of points. This is the number of smaples on which to run the transform.
    * Whether it requires a forward or a backwards transform.
-   * Type of filter. This module only implements a one-dimensional FFT.
+   * Type of filter (for example, this module only implements a one-dimensional FFT)
 
 As a rule of thumb, computational requirements are O(n log n) in the number
 of points. Double the number of points doubles the time that an FFT takes
@@ -87,7 +89,7 @@ API
 ---
 
 Sine arrays
------------
++++++++++++
 
 The include file "fft.h" defines a set of arrays that are to be used with
 the FFT functions, called sine_8[], sine_16[], ..., sine_8192[]. Depending on the
@@ -95,7 +97,7 @@ number of points, pick the appropriate array and pass it to fftForward and
 fftInverse as required.
 
 FFT functions
--------------
++++++++++++++
 
 .. doxygenfunction:: fftTwiddle
 

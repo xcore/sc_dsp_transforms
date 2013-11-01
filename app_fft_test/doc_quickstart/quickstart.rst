@@ -36,13 +36,12 @@ Now that the application has been compiled, the next step is to run it on the sl
    #. Click on the ``Run`` icon (the white arrow in the green circle). 
    #. At the ``Select Device`` dialog select ``XMOS XTAG-2 connect to L1[0..1]`` and click ``OK``.
 
-The output on the LCD should look begin like this::
+The output in the xTIMEcomposer console window should look begin like this::
 
   FORWARDING
   Ticks: 1214
-
-and ends like this::
-
+  ....
+  ....
   1024 Point FFT: Sum Sig^2: 183169703 * 10^9 Sum Err^2: 2660352
        
     
@@ -50,5 +49,5 @@ Next Steps
 ----------
 
   #. Take a look at the module documentation which can be accessed from the front page for the item in the xTIMEcomposer developer column
-  #. Take a look at a more complex application example - `Spectrum/Level Meter Display Demo` - that makes use of this module. 
+  #. Take a look at a more complex application example called ``Spectrum/Level Meter Display Demo`` that makes use of this module. 
 

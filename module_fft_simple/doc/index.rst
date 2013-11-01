@@ -1,5 +1,5 @@
-Simple FFT function library user guide
-======================================
+Simple FFT function library 
+============================
 
 .. toctree::
 
