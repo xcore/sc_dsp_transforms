@@ -1,7 +1,7 @@
 sc_dsp_transforms
 .................
 
-:Latest release: 1.0.0rc1
+:Latest release: 1.0.0rc2
 :Maintainer: XMOS
 :Description: a range of utility modules for common dsp functions
 
