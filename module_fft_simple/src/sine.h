@@ -14,3 +14,6 @@ extern int sine_1024[];
 extern int sine_2048[];
 extern int sine_4096[];
 extern int sine_8192[];
+
+#define FFT_SINE0(N) sine_ ## N
+#define FFT_SINE(N) FFT_SINE0(N)

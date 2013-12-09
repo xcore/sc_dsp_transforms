@@ -18,11 +18,11 @@ void fftRealTest() {
 
     printf("FORWARDING\n");
     fftTwiddle(re3, im3, 8);
-    fftForward(re3, im3, 8, sine_8);
+    fftForward(re3, im3, 8, FFT_SINE(8));
     fftTwiddle(re4, im4, 8);
-    fftForward(re4, im4, 8, sine_8);
+    fftForward(re4, im4, 8, FFT_SINE(8));
 t :> t0;
-    fftTwoRealsForward(re1, re2, im1, im2, 8, sine_8);
+    fftTwoRealsForward(re1, re2, im1, im2, 8, FFT_SINE(8));
 t :> t1;
     printf("Ticks: %d\n", t1-t0);
     for(int i = 0; i < 8; i++) {
@@ -32,10 +32,10 @@ t :> t1;
     }
     printf("INVERSING\n");
     fftTwiddle(re3, im3, 8);
-    fftInverse(re3, im3, 8, sine_8);
+    fftInverse(re3, im3, 8, FFT_SINE(8));
     fftTwiddle(re4, im4, 8);
-    fftInverse(re4, im4, 8, sine_8);
-    fftTwoRealsInverse(re1, re2, im1, im2, 8, sine_8);
+    fftInverse(re4, im4, 8, FFT_SINE(8));
+    fftTwoRealsInverse(re1, re2, im1, im2, 8, FFT_SINE(8));
     for(int i = 0; i < 8; i++) {
         printf("%8d + %8d i = %8d + %8d i  ;  %8d + %8d i = %8d + %8d i\n",
                re1[i], 0, re3[i], im3[i],
@@ -49,20 +49,20 @@ t :> t1;
 void fftTest8() {
     int re[8], im[8];
     for(int i = 0; i < 8; i++) {
-        re[i] = ((i*i*i) & 255) * 1000000;//sinValue(sine_8, i, 8, 8)>>24;
-        im[i] = 0;//(737*i) & 255; //0; //cosValue(sine_8, i, 8, 8)>>24;
+        re[i] = ((i*i*i) & 255) * 1000000;//sinValue(FFT_SINE(8), i, 8, 8)>>24;
+        im[i] = 0;//(737*i) & 255; //0; //cosValue(FFT_SINE(8), i, 8, 8)>>24;
     }
     for(int i = 0; i < 8; i++) {
         printf("%d  %d\n", re[i], im[i]);
     }
     fftTwiddle(re, im, 8);
-    fftForward(re, im, 8, sine_8);
+    fftForward(re, im, 8, FFT_SINE(8));
     printf("Post FFT\n");
     for(int i = 0; i < 8; i++) {
         printf("%d  %d\n", re[i], im[i]);
     }
     fftTwiddle(re, im, 8);
-    fftInverse(re, im, 8, sine_8);
+    fftInverse(re, im, 8, FFT_SINE(8));
     printf("Post Inverse\n");
     for(int i = 0; i < 8; i++) {
         printf("%d  %d\n", re[i], im[i]);
@@ -82,10 +82,10 @@ void fftTest8Large() {
         iim[i] = im[i] = ((737123*i) & 0xFF) * 1000001;
     }
     fftTwiddle(re, im, 8);
-    fftForward(re, im, 8, sine_8);
+    fftForward(re, im, 8, FFT_SINE(8));
     printf("Post FFT\n");
     fftTwiddle(re, im, 8);
-    fftInverse(re, im, 8, sine_8);
+    fftInverse(re, im, 8, FFT_SINE(8));
     printf("Post Inverse\n");
 
     for(int i = 0; i < 8; i++) {
@@ -100,14 +100,14 @@ void fftTest1024Large() {
     int ire[1024], iim[1024];
     int err = 0, sig = 0;
     for(int i = 0; i < 1024; i++) {
-        ire[i] = re[i] = (i*i*i*1234567) & 0xFFFFFF;//sinValue(sine_1024, i, 1024, 1024)>>24;
-        iim[i] = im[i] = (737123*i) & 0xFFFFFF; //0; //cosValue(sine_1024, i, 1024, 1024)>>24;
+        ire[i] = re[i] = (i*i*i*1234567) & 0xFFFFFF;//sinValue(FFT_SINE(1024), i, 1024, 1024)>>24;
+        iim[i] = im[i] = (737123*i) & 0xFFFFFF; //0; //cosValue(FFT_SINE(1024), i, 1024, 1024)>>24;
     }
     fftTwiddle(re, im, 1024);
-    fftForward(re, im, 1024, sine_1024);
+    fftForward(re, im, 1024, FFT_SINE(1024));
     printf("Post FFT\n");
     fftTwiddle(re, im, 1024);
-    fftInverse(re, im, 1024, sine_1024);
+    fftInverse(re, im, 1024, FFT_SINE(1024));
     printf("Post Inverse\n");
 
     for(int i = 0; i < 1024; i++) {
@@ -124,15 +124,15 @@ void fftTest32() {
 
     int re[32], im[32];
     for(int i = 0; i < 32; i++) {
-        re[i] = (i*i*i) & 255;//sinValue(sine_32, i, 32, 32)/0x1000000;
-        im[i] = (737*i) & 255; //0; //cosValue(sine_32, i, 32, 32)>>24;
+        re[i] = (i*i*i) & 255;//sinValue(FFT_SINE(32), i, 32, 32)/0x1000000;
+        im[i] = (737*i) & 255; //0; //cosValue(FFT_SINE(32), i, 32, 32)>>24;
     }
     for(int i = 0; i < 32; i++) {
         printf("%d  %d\n", re[i], im[i]);
     }
     fftTwiddle(re, im, 32);
     t :> t0;
-    fftForward(re, im, 32, sine_32);
+    fftForward(re, im, 32, FFT_SINE(32));
     t :> t1;
     printf("Post FFT (%d)\n", t1-t0);
     for(int i = 0; i < 32; i++) {
@@ -140,7 +140,7 @@ void fftTest32() {
     }
     fftTwiddle(re, im, 32);
     t :> t0;
-    fftInverse(re, im, 32, sine_32);
+    fftInverse(re, im, 32, FFT_SINE(32));
     t :> t1;
     printf("Post Inverse (%d)\n", t1-t0);
     for(int i = 0; i < 32; i++) {
@@ -156,20 +156,20 @@ void fftTest64() {
     int err = 0, sig = 0;
 
     for(int i = 0; i < 64; i++) {
-        ire[i] = re[i] = (i*i*i*12345) & 65535;//sinValue(sine_64, i, 64, 64)/0x1000000;
-        iim[i] = im[i] = (73117*i) & 65535; //0; //cosValue(sine_64, i, 64, 64)>>24;
+        ire[i] = re[i] = (i*i*i*12345) & 65535;//sinValue(FFT_SINE(64), i, 64, 64)/0x1000000;
+        iim[i] = im[i] = (73117*i) & 65535; //0; //cosValue(FFT_SINE(64), i, 64, 64)>>24;
     }
     t :> t0;
     fftTwiddle(re, im, 64);
     t :> t1;
     printf("Post 64 twiddle (%d ticks)\n", t1-t0);
     t :> t0;
-    fftForward(re, im, 64, sine_64);
+    fftForward(re, im, 64, FFT_SINE(64));
     t :> t1;
     printf("Post 64 FFT (%d ticks)\n", t1-t0);
     fftTwiddle(re, im, 64);
     t :> t0;
-    fftInverse(re, im, 64, sine_64);
+    fftInverse(re, im, 64, FFT_SINE(64));
     t :> t1;
     printf("Post 64 Inverse (%d ticks)\n", t1-t0);
     for(int i = 0; i < 64; i++) {
@@ -185,20 +185,20 @@ void fftTest1024() {
 
     int re[1024], im[1024];
     for(int i = 0; i < 1024; i++) {
-        re[i] = (i*i*i) & 255;//sinValue(sine_1024, i, 1024, 1024)/0x1000000;
-        im[i] = (737*i) & 255; //0; //cosValue(sine_1024, i, 1024, 1024)>>24;
+        re[i] = (i*i*i) & 255;//sinValue(FFT_SINE(1024), i, 1024, 1024)/0x1000000;
+        im[i] = (737*i) & 255; //0; //cosValue(FFT_SINE(1024), i, 1024, 1024)>>24;
     }
     t :> t0;
     fftTwiddle(re, im, 1024);
     t :> t1;
     printf("Post 1024 twiddle (%d ticks)\n", t1-t0);
     t :> t0;
-    fftForward(re, im, 1024, sine_1024);
+    fftForward(re, im, 1024, FFT_SINE(1024));
     t :> t1;
     printf("Post 1024 FFT (%d ticks)\n", t1-t0);
     fftTwiddle(re, im, 1024);
     t :> t0;
-    fftInverse(re, im, 1024, sine_1024);
+    fftInverse(re, im, 1024, FFT_SINE(1024));
     t :> t1;
     printf("Post 1024 Inverse (%d ticks)\n", t1-t0);
 }
