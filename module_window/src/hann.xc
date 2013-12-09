@@ -17,12 +17,12 @@ static inline int hmul(int a, int b) {
 void windowHann(int output[], int data[], int offset, int N, int sine[]) {
     for(int i = 0; i < (N>>2); i++) {
         int s = sine[i]>>1;
-        printf("%d... %08x\n", i, s);
+        //printf("%d... %08x\n", i, s);
         output[1*(N>>2)-i] = hmul(data[1*(N>>2)-i+offset], 0x3fffffff-s);
         output[1*(N>>2)+i] = hmul(data[1*(N>>2)+i+offset], 0x3fffffff+s);
         output[3*(N>>2)-i] = hmul(data[3*(N>>2)-i+offset], 0x3fffffff+s);
         output[3*(N>>2)+i] = hmul(data[3*(N>>2)+i+offset], 0x3fffffff-s);
-        printf("done %d...\n", i);
+        //printf("done %d...\n", i);
     }
     output[0] = 0;
     output[N>>1] = hmul(data[(N>>1)+offset], 0x7ffffffe);
