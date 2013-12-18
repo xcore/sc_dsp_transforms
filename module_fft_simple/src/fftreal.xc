@@ -8,7 +8,7 @@
 
 
 #pragma unsafe arrays
-void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int sine[]) {
+void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, const int sine[]) {
     fftTwiddle(re1, re2, N);
     fftForward(re1, re2, N, sine);
     im1[0] = 0;
@@ -28,7 +28,7 @@ void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int s
 }
 
 #pragma unsafe arrays
-void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, int sine[]) {
+void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, const int sine[]) {
     for(int i = N >> 1; i != 0; i--) {
         re1[i] = re1[i] + im2[N-i];
         re1[N-i] = re1[N-i] + im2[i];

@@ -31,7 +31,7 @@
  *              Arrays are provided in sine.h; for example, for a 1024 point
  *              FFT use sin_1024.
  */
-void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int sine[]);
+void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, const int sine[]);
 
 /** This function computes the inverse FFT on two sets of complex data that
  * are known to result in real numbers only in one go. It uses a nifty
@@ -59,4 +59,4 @@ void fftTwoRealsForward(int re1[], int re2[], int im1[], int im2[], int N, int s
  *              Arrays are provided in sine.h; for example, for a 1024 point
  *              FFT use sin_1024.
  */
-void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, int sine[]);
+void fftTwoRealsInverse(int re1[], int re2[], int im1[], int im2[], int N, const int sine[]);

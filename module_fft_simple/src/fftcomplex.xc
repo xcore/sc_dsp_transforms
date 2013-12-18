@@ -25,7 +25,7 @@ void fftTwiddle(int re[], int im[], int N) {
 }
 
 #pragma unsafe arrays
-void fftForward(int re[], int im[], int N, int sine[]) {
+void fftForward(int re[], int im[], int N, const int sine[]) {
     unsigned int shift = 30-clz(N);
     for(unsigned int step = 2 ; step <= N; step = step * 2, shift--) {
         unsigned int step2 = step >> 1;
@@ -87,7 +87,7 @@ void fftForward(int re[], int im[], int N, int sine[]) {
 // Note: for an extra bit of precision change the 8 lines that use 0x80000000 or l>>31.
 
 #pragma unsafe arrays
-void fftInverse(int re[], int im[], int N, int sine[]) {
+void fftInverse(int re[], int im[], int N, const int sine[]) {
     unsigned int shift = 30-clz(N);
     for(unsigned int step = 2 ; step <= N; step = step * 2, shift--) {
         unsigned int step2 = step >> 1;
