@@ -21,4 +21,4 @@
  *                    module_fft_simple.
 
  */
-extern void windowHann(int output[], int data[], int offset, int N, int sine[]);
+extern void windowHann(int output[], int data[], int offset, int N, const int sine[]);

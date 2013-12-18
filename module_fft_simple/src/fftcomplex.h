@@ -23,7 +23,7 @@
  *              Arrays are provided in sine.h; for example, for a 1024 point
  *              FFT use sin_1024.
  */
-void fftForward(int re[], int im[], int N, int sine[]);
+void fftForward(int re[], int im[], int N, const int sine[]);
 
 /** This function computes an inverse FFT. The complex input array is
  * supplied as two arrays of integers, with numbers represented as
@@ -43,7 +43,7 @@ void fftForward(int re[], int im[], int N, int sine[]);
  *              Arrays are provided in sine.h; for example, for a 1024 point
  *              FFT use sin_1024.
  */
-void fftInverse(int re[], int im[], int N, int sine[]);
+void fftInverse(int re[], int im[], int N, const int sine[]);
 
 /** This function twiddles the arrays around prior to computing an FFT. A
  * calling sequence for a forward FFT involves fftTwiddle() followed by
